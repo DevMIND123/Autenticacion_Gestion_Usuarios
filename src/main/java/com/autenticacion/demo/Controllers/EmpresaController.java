@@ -20,4 +20,10 @@ public class EmpresaController {
         EmpresaRespuestaDTO respuesta = empresaService.registrarEmpresa(dto);
         return ResponseEntity.ok(respuesta);
     }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<EmpresaRespuestaDTO> obtenerEmpresaPorEmail(@PathVariable String email) {
+    EmpresaRespuestaDTO respuesta = empresaService.obtenerEmpresaPorEmail(email);
+    return ResponseEntity.ok(respuesta);
+    }
 }

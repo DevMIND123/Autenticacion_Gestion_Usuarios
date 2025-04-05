@@ -54,4 +54,21 @@ public class EmpresaServiceImpl implements EmpresaService {
             throw new RuntimeException("❌ Error al registrar empresa: " + e.getMessage());
         }
     }
+
+    @Override
+    public EmpresaRespuestaDTO obtenerEmpresaPorEmail(String email) {
+    Empresa empresa = empresaRepository.findByEmail(email)
+        .orElseThrow(() -> new RuntimeException("Empresa no encontrada con el correo: " + email));
+
+    return EmpresaRespuestaDTO.builder()
+            .id(empresa.getId())
+            .tipoDocumento(empresa.getTipoDocumento())
+            .numeroDocumento(empresa.getNumeroDocumento())
+            .nombreEmpresa(empresa.getNombreEmpresa())
+            .nombreRepresentante(empresa.getNombreRepresentante())
+            .email(empresa.getEmail())
+            .estadoCuenta(empresa.getEstadoCuenta())
+            .urlLogo(empresa.getUrlLogo())
+            .build();
+    }
 }
