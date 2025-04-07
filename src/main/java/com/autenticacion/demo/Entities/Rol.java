@@ -4,6 +4,4 @@ public enum Rol {
     CLIENTE,
     EMPRESA,
     ADMINISTRADOR
-} 
-    
-
+}
