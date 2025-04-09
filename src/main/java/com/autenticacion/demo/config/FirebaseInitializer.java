@@ -9,13 +9,16 @@ import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Component
 public class FirebaseInitializer {
 
     @PostConstruct
     public void initialize() throws IOException {
-        Dotenv dotenv = Dotenv.configure()
+	
+	Dotenv dotenv = Dotenv.configure()
             .filename("firebase.env") 
             .load();
 
