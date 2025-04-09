@@ -33,7 +33,7 @@ public class UsuarioController {
         return ResponseEntity.ok(respuesta);
     }
 
-    @PatchMapping("actualizar/{id}")
+    @PatchMapping("/actualizar/{id}")
     public ResponseEntity<String> actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioActualizarDTO usuario) {
         logger.info("PATCH /actualizar/{} - Datos recibidos: {}", id, usuario);
         boolean respuesta = usuarioService.actualizarUsuario(id, usuario);
@@ -44,7 +44,7 @@ public class UsuarioController {
         }
     }
 
-    @DeleteMapping("eliminar/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
