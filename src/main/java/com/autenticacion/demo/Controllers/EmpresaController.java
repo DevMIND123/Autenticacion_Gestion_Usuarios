@@ -1,5 +1,6 @@
 package com.autenticacion.demo.Controllers;
 
+import com.autenticacion.demo.Dto.CambioPasswordDTO;
 import com.autenticacion.demo.Dto.EmpresaRegistroDTO;
 import com.autenticacion.demo.Dto.EmpresaRespuestaDTO;
 import com.autenticacion.demo.Services.EmpresaService;
@@ -28,5 +29,11 @@ public class EmpresaController {
     public ResponseEntity<EmpresaRespuestaDTO> obtenerEmpresaPorEmail(@PathVariable String email) {
     EmpresaRespuestaDTO respuesta = empresaService.obtenerEmpresaPorEmail(email);
     return ResponseEntity.ok(respuesta);
+    }
+
+    @PatchMapping("/cambiar-password")
+public ResponseEntity<String> cambiarPassword(@RequestBody @Valid CambioPasswordDTO dto) {
+    empresaService.cambiarPassword(dto);
+    return ResponseEntity.ok("Contraseña actualizada correctamente.");
     }
 }

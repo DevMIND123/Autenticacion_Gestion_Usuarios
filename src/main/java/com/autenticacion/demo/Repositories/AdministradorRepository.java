@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Repository
 public interface AdministradorRepository extends JpaRepository<Administrador, Long> {
     Optional<Administrador> findByEmail(String email);

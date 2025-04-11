@@ -3,6 +3,7 @@ package com.autenticacion.demo.Services.impl;
 import com.autenticacion.demo.Dto.AdministradorActualizarDTO;
 import com.autenticacion.demo.Dto.AdministradorRegistroDTO;
 import com.autenticacion.demo.Dto.AdministradorRespuestaDTO;
+import com.autenticacion.demo.Dto.CambioPasswordDTO;
 import com.autenticacion.demo.Entities.Administrador;
 import com.autenticacion.demo.Repositories.AdministradorRepository;
 import com.autenticacion.demo.Services.AdministradorService;
@@ -23,7 +24,7 @@ import java.util.Date;
 @Service
 public class AdministradorServiceImpl implements AdministradorService {
 
-        Logger logger = LoggerFactory.getLogger(AdministradorService.class);
+        Logger logger = LoggerFactory.getLogger(AdministradorServiceImpl.class);
 
         @Autowired
         private AdministradorRepository administradorRepository;
@@ -97,4 +98,40 @@ public class AdministradorServiceImpl implements AdministradorService {
 
                 administradorRepository.delete(administrador);
         }
-}
+
+        @Override
+        public void cambiarPassword(CambioPasswordDTO dto) {
+            try {
+                logger.info("🔐 Iniciando cambio de contraseña para admin: {}", dto.getEmail());
+    
+                // 1. Buscar en Firebase
+                UserRecord userRecord = FirebaseAuth.getInstance().getUserByEmail(dto.getEmail());
+                logger.info("✅ Usuario Firebase encontrado: UID={}", userRecord.getUid());
+    
+                // 2. Actualizar la contraseña en Firebase
+                UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(userRecord.getUid())
+                        .setPassword(dto.getNuevaPassword());
+                FirebaseAuth.getInstance().updateUser(request);
+                logger.info("🔁 Contraseña actualizada en Firebase correctamente");
+    
+                // 3. Buscar administrador en PostgreSQL
+                Administrador admin = administradorRepository.findByEmail(dto.getEmail())
+                        .orElseThrow(() -> {
+                            logger.error("❌ No se encontró el administrador con email {}", dto.getEmail());
+                            return new RuntimeException("Administrador no encontrado");
+                        });
+    
+                logger.info("✅ Admin encontrado en BD: id={}, nombre={}", admin.getId(), admin.getNombre());
+    
+                // 4. Encriptar y guardar en PostgreSQL
+                admin.setPassword(passwordEncoder.encode(dto.getNuevaPassword()));
+                administradorRepository.save(admin);
+                logger.info("✅ Contraseña actualizada y guardada en PostgreSQL");
+    
+            } catch (Exception e) {
+                logger.error("❌ Error al cambiar contraseña del administrador: {}", e.getMessage());
+                e.printStackTrace();
+                throw new RuntimeException("❌ Error al cambiar contraseña: " + e.getMessage());
+            }
+        }
+    }

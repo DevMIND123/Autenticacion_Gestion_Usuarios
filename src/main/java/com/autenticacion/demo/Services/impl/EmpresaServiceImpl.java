@@ -1,5 +1,6 @@
 package com.autenticacion.demo.Services.impl;
 
+import com.autenticacion.demo.Dto.CambioPasswordDTO;
 import com.autenticacion.demo.Dto.EmpresaRegistroDTO;
 import com.autenticacion.demo.Dto.EmpresaRespuestaDTO;
 import com.autenticacion.demo.Entities.Empresa;
@@ -74,5 +75,26 @@ public class EmpresaServiceImpl implements EmpresaService {
             .estadoCuenta(empresa.getEstadoCuenta())
             .urlLogo(empresa.getUrlLogo())
             .build();
+    }
+
+    @Override
+public void cambiarPassword(CambioPasswordDTO dto) {
+    try {
+        // Firebase
+        UserRecord user = FirebaseAuth.getInstance().getUserByEmail(dto.getEmail());
+        FirebaseAuth.getInstance().updateUser(
+                new UserRecord.UpdateRequest(user.getUid()).setPassword(dto.getNuevaPassword())
+        );
+
+        // PostgreSQL
+        Empresa empresa = empresaRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("Empresa no encontrada"));
+
+        empresa.setPassword(passwordEncoder.encode(dto.getNuevaPassword()));
+        empresaRepository.save(empresa);
+
+    } catch (Exception e) {
+        throw new RuntimeException("Error al cambiar contraseña: " + e.getMessage());
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.autenticacion.demo.Services;
 import com.autenticacion.demo.Dto.AdministradorActualizarDTO;
 import com.autenticacion.demo.Dto.AdministradorRegistroDTO;
 import com.autenticacion.demo.Dto.AdministradorRespuestaDTO;
+import com.autenticacion.demo.Dto.CambioPasswordDTO;
 
 public interface AdministradorService {
 
@@ -13,4 +14,6 @@ public interface AdministradorService {
     boolean actualizarAdministrador(Long id, AdministradorActualizarDTO usuario);
 
     void eliminarAdministrador(Long id);
+
+    void cambiarPassword(CambioPasswordDTO dto);
 }

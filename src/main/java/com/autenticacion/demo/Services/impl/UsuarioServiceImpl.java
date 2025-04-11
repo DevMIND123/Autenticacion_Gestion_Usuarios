@@ -1,5 +1,6 @@
 package com.autenticacion.demo.Services.impl;
 
+import com.autenticacion.demo.Dto.CambioPasswordDTO;
 import com.autenticacion.demo.Dto.UsuarioActualizarDTO;
 import com.autenticacion.demo.Dto.UsuarioRegistroDTO;
 import com.autenticacion.demo.Dto.UsuarioRespuestaDTO;
@@ -97,5 +98,26 @@ public class UsuarioServiceImpl implements UsuarioService {
                                                 "Usuario con id " + id + " no encontrado"));
 
                 usuarioRepository.delete(usuario);
+        }
+
+        @Override
+public void cambiarPassword(CambioPasswordDTO dto) {
+    try {
+        // Firebase
+        UserRecord user = FirebaseAuth.getInstance().getUserByEmail(dto.getEmail());
+        FirebaseAuth.getInstance().updateUser(
+                new UserRecord.UpdateRequest(user.getUid()).setPassword(dto.getNuevaPassword())
+        );
+
+        // PostgreSQL
+        Usuario usuario = usuarioRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        usuario.setPassword(passwordEncoder.encode(dto.getNuevaPassword()));
+        usuarioRepository.save(usuario);
+
+    } catch (Exception e) {
+        throw new RuntimeException("Error al cambiar contraseña: " + e.getMessage());
+                }
         }
 }

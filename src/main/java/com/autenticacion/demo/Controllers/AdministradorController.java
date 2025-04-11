@@ -3,6 +3,7 @@ package com.autenticacion.demo.Controllers;
 import com.autenticacion.demo.Dto.AdministradorActualizarDTO;
 import com.autenticacion.demo.Dto.AdministradorRegistroDTO;
 import com.autenticacion.demo.Dto.AdministradorRespuestaDTO;
+import com.autenticacion.demo.Dto.CambioPasswordDTO;
 import com.autenticacion.demo.Services.AdministradorService;
 
 import jakarta.validation.Valid;
@@ -52,6 +53,11 @@ public class AdministradorController {
     public ResponseEntity<Void> eliminarAdministrador(@PathVariable Long id) {
         administradorService.eliminarAdministrador(id);
         return ResponseEntity.noContent().build();
+    }
+    @PatchMapping("/cambiar-password")
+    public ResponseEntity<String> cambiarPassword(@RequestBody @Valid CambioPasswordDTO dto) {
+        administradorService.cambiarPassword(dto);
+        return ResponseEntity.ok("Contraseña actualizada correctamente.");
     }
 
 }

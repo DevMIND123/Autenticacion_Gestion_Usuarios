@@ -1,5 +1,6 @@
 package com.autenticacion.demo.Controllers;
 
+import com.autenticacion.demo.Dto.CambioPasswordDTO;
 import com.autenticacion.demo.Dto.UsuarioActualizarDTO;
 import com.autenticacion.demo.Dto.UsuarioRegistroDTO;
 import com.autenticacion.demo.Dto.UsuarioRespuestaDTO;
@@ -51,5 +52,12 @@ public class UsuarioController {
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/cambiar-password")
+    public ResponseEntity<String> cambiarPassword(@RequestBody @Valid CambioPasswordDTO dto) {
+    usuarioService.cambiarPassword(dto);
+    return ResponseEntity.ok("Contraseña actualizada correctamente.");
+    }
+
 
 }
