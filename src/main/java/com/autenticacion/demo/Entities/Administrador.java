@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "administradores")
 @SuperBuilder
 
-public class Usuario extends Persona {
+public class Administrador extends Persona {
+
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
 
 }

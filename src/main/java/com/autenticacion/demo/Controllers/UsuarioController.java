@@ -5,6 +5,8 @@ import com.autenticacion.demo.Dto.UsuarioRegistroDTO;
 import com.autenticacion.demo.Dto.UsuarioRespuestaDTO;
 import com.autenticacion.demo.Services.UsuarioService;
 
+import jakarta.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<UsuarioRespuestaDTO> registrarUsuario(@RequestBody UsuarioRegistroDTO dto) {
+    public ResponseEntity<UsuarioRespuestaDTO> registrarUsuario(@RequestBody @Valid UsuarioRegistroDTO dto) {
         UsuarioRespuestaDTO respuesta = usuarioService.registrarUsuario(dto);
         return ResponseEntity.ok(respuesta);
     }
@@ -34,7 +36,7 @@ public class UsuarioController {
     }
 
     @PatchMapping("/actualizar/{id}")
-    public ResponseEntity<String> actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioActualizarDTO usuario) {
+    public ResponseEntity<String> actualizarUsuario(@PathVariable Long id, @RequestBody @Valid UsuarioActualizarDTO usuario) {
         logger.info("PATCH /actualizar/{} - Datos recibidos: {}", id, usuario);
         boolean respuesta = usuarioService.actualizarUsuario(id, usuario);
         if (respuesta) {

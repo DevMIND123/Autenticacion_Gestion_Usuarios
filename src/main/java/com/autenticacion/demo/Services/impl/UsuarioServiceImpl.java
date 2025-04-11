@@ -43,7 +43,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                                         .email(dto.getEmail())
                                         .password(dto.getPassword()) // puedes encriptarlo si quieres
                                         .fechaRegistro(new Date())
-                                        .rol(dto.getRol())
                                         .estadoCuenta("Activo")
                                         .build();
 
@@ -54,7 +53,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                                         .id(guardado.getId())
                                         .nombre(guardado.getNombre())
                                         .email(guardado.getEmail())
-                                        .rol(guardado.getRol())
                                         .estadoCuenta(guardado.getEstadoCuenta())
                                         .build();
 
@@ -72,7 +70,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                                 .id(usuario.getId())
                                 .nombre(usuario.getNombre())
                                 .email(usuario.getEmail())
-                                .rol(usuario.getRol())
                                 .estadoCuenta(usuario.getEstadoCuenta())
                                 .build();
         }

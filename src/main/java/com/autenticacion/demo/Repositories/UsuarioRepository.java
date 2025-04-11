@@ -1,6 +1,7 @@
 package com.autenticacion.demo.Repositories;
 
 import com.autenticacion.demo.Entities.Usuario;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
