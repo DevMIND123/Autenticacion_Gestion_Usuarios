@@ -8,6 +8,7 @@ import com.autenticacion.demo.Services.EmpresaService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,9 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     @Autowired
     private EmpresaRepository empresaRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public EmpresaRespuestaDTO registrarEmpresa(EmpresaRegistroDTO dto) {
@@ -33,7 +37,7 @@ public class EmpresaServiceImpl implements EmpresaService {
                     .nombreEmpresa(dto.getNombreEmpresa())
                     .nombreRepresentante(dto.getNombreRepresentante())
                     .email(dto.getEmail())
-                    .password(dto.getPassword()) // puedes encriptarlo
+                    .password(passwordEncoder.encode(dto.getPassword())) 
                     .estadoCuenta("Activo")
                     .build();
 

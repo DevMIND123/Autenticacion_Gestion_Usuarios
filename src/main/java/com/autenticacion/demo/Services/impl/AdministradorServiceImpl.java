@@ -10,6 +10,7 @@ import com.autenticacion.demo.Services.AdministradorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
@@ -27,6 +28,9 @@ public class AdministradorServiceImpl implements AdministradorService {
         @Autowired
         private AdministradorRepository administradorRepository;
 
+        @Autowired
+        private PasswordEncoder passwordEncoder;
+
         @Override
         public AdministradorRespuestaDTO registrarAdministrador(AdministradorRegistroDTO dto) {
                 try {
@@ -41,8 +45,7 @@ public class AdministradorServiceImpl implements AdministradorService {
                         Administrador administrador = Administrador.builder()
                                         .nombre(dto.getNombre())
                                         .email(dto.getEmail())
-                                        .password(dto.getPassword()) // puedes encriptarlo si quieres
-                                        .fechaRegistro(new Date())
+                                        .password(passwordEncoder.encode(dto.getPassword()))
                                         .estadoCuenta("Activo")
                                         .build();
 

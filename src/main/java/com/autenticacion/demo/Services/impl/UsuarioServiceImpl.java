@@ -10,6 +10,7 @@ import com.autenticacion.demo.Services.UsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
@@ -27,6 +28,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         @Autowired
         private UsuarioRepository usuarioRepository;
 
+        @Autowired
+        private PasswordEncoder passwordEncoder;
+
         @Override
         public UsuarioRespuestaDTO registrarUsuario(UsuarioRegistroDTO dto) {
                 try {
@@ -41,7 +45,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                         Usuario usuario = Usuario.builder()
                                         .nombre(dto.getNombre())
                                         .email(dto.getEmail())
-                                        .password(dto.getPassword()) // puedes encriptarlo si quieres
+                                        .password(passwordEncoder.encode(dto.getPassword())) // puedes encriptarlo si quieres
                                         .fechaRegistro(new Date())
                                         .estadoCuenta("Activo")
                                         .build();
