@@ -1,11 +1,14 @@
 package com.autenticacion.demo.Dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CambioPasswordDTO {
+
     @NotBlank
     @Email
     private String email;

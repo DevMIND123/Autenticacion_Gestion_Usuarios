@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AdministradorRegistroDTO {
+public class ClienteRegistroDTO {
 
     @NotBlank
     private String nombre;
@@ -21,5 +21,5 @@ public class AdministradorRegistroDTO {
     private String password;
 
     @NotNull
-    private Rol rol; // ADMINISTRADOR / SOPORTE / MARKETING
+    private Rol rol; // CLIENTE
 }

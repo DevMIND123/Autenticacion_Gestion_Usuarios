@@ -1,6 +1,5 @@
 package com.autenticacion.demo.Dto;
 
-import com.autenticacion.demo.Entities.Rol;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -8,18 +7,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AdministradorRegistroDTO {
+public class ClienteActualizarDTO {
 
     @NotBlank
     private String nombre;
 
+    @NotBlank
     @Email
-    @NotBlank
     private String email;
-
-    @NotBlank
-    private String password;
-
-    @NotNull
-    private Rol rol; // ADMINISTRADOR / SOPORTE / MARKETING
 }

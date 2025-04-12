@@ -2,17 +2,15 @@ package com.autenticacion.demo.Entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-
 import java.util.Date;
 
-@Entity 
-@Inheritance(strategy = InheritanceType.JOINED)
+@Entity
+@Table(name = "clientes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
-public class Persona {
+@Builder
+public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,14 +18,17 @@ public class Persona {
 
     private String nombre;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;
 
-    @Column(name = "estado_cuenta")
     private String estadoCuenta;
+
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
 }

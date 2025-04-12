@@ -15,26 +15,29 @@ public class Empresa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_documento")
-    private TipoDocumento tipoDocumento;
-
-    @Column(name = "numero_documento", unique = true)
-    private String numeroDocumento;
-
-    @Column(name = "nombre_empresa")
+    @Column(name = "nombre_empresa", nullable = false)
     private String nombreEmpresa;
 
-    @Column(name = "nombre_representante")
+    @Column(name = "nit", unique = true, nullable = false)
+    private String nit;
+
+    @Column(name = "nombre_representante", nullable = false)
     private String nombreRepresentante;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private String direccion;
+
+    @Column(nullable = false)
+    private String telefono;
+
+    @Column(nullable = false)
     private String password;
 
     private String estadoCuenta;
 
-    @Column(name = "url_logo")
-    private String urlLogo; // aquí guardaremos la URL de la imagen subida
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
 }

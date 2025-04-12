@@ -1,6 +1,6 @@
 package com.autenticacion.demo.Dto;
 
-import com.autenticacion.demo.Entities.TipoDocumento;
+import com.autenticacion.demo.Entities.Rol;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -10,22 +10,28 @@ import lombok.*;
 @Builder
 public class EmpresaRegistroDTO {
 
-    @NotNull(message = "El tipo de documento no puede ser nulo")
-    private TipoDocumento tipoDocumento;
-
-    @NotBlank(message = "El número de documento no puede ser nulo")
-    private String numeroDocumento;
-
-    @NotBlank(message = "El nombre de la empresa no puede ser nulo")
+    @NotBlank
     private String nombreEmpresa;
 
-    @NotBlank(message = "El nombre del representante no puede ser nulo")
+    @NotBlank
+    private String nit;
+
+    @NotBlank
     private String nombreRepresentante;
 
-    @NotBlank(message = "El email no puede ser nulo")
-    @Email(message = "El correo no tiene un formato válido")
+    @Email
+    @NotBlank
     private String email;
 
-    @NotBlank(message = "La contraseña no puede ser nulo")
+    @NotBlank
+    private String direccion;
+
+    @NotBlank
+    private String telefono;
+
+    @NotBlank
     private String password;
+
+    @NotNull
+    private Rol rol; // EMPRESA
 }

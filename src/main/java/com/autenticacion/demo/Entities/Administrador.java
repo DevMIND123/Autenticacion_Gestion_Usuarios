@@ -1,19 +1,30 @@
 package com.autenticacion.demo.Entities;
 
 import jakarta.persistence.*;
-import lombok.experimental.SuperBuilder;
 import lombok.*;
 
-@Data 
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "administradores")
-@SuperBuilder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Administrador {
 
-public class Administrador extends Persona {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nombre;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    private String estadoCuenta;
 
     @Enumerated(EnumType.STRING)
     private Rol rol;
-
 }
