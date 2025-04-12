@@ -1,5 +1,6 @@
 package com.autenticacion.demo.Services.impl;
 
+import com.autenticacion.demo.Dto.CambioPasswordDTO;
 import com.autenticacion.demo.Dto.EmpresaRegistroDTO;
 import com.autenticacion.demo.Dto.EmpresaRespuestaDTO;
 import com.autenticacion.demo.Entities.Empresa;
@@ -8,6 +9,7 @@ import com.autenticacion.demo.Services.EmpresaService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +17,9 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     @Autowired
     private EmpresaRepository empresaRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public EmpresaRespuestaDTO registrarEmpresa(EmpresaRegistroDTO dto) {
@@ -33,7 +38,7 @@ public class EmpresaServiceImpl implements EmpresaService {
                     .nombreEmpresa(dto.getNombreEmpresa())
                     .nombreRepresentante(dto.getNombreRepresentante())
                     .email(dto.getEmail())
-                    .password(dto.getPassword()) // puedes encriptarlo
+                    .password(passwordEncoder.encode(dto.getPassword())) 
                     .estadoCuenta("Activo")
                     .build();
 
@@ -70,5 +75,26 @@ public class EmpresaServiceImpl implements EmpresaService {
             .estadoCuenta(empresa.getEstadoCuenta())
             .urlLogo(empresa.getUrlLogo())
             .build();
+    }
+
+    @Override
+public void cambiarPassword(CambioPasswordDTO dto) {
+    try {
+        // Firebase
+        UserRecord user = FirebaseAuth.getInstance().getUserByEmail(dto.getEmail());
+        FirebaseAuth.getInstance().updateUser(
+                new UserRecord.UpdateRequest(user.getUid()).setPassword(dto.getNuevaPassword())
+        );
+
+        // PostgreSQL
+        Empresa empresa = empresaRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("Empresa no encontrada"));
+
+        empresa.setPassword(passwordEncoder.encode(dto.getNuevaPassword()));
+        empresaRepository.save(empresa);
+
+    } catch (Exception e) {
+        throw new RuntimeException("Error al cambiar contraseña: " + e.getMessage());
+        }
     }
 }

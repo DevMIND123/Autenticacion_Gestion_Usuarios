@@ -1,5 +1,6 @@
 package com.autenticacion.demo.Services.impl;
 
+import com.autenticacion.demo.Dto.CambioPasswordDTO;
 import com.autenticacion.demo.Dto.UsuarioActualizarDTO;
 import com.autenticacion.demo.Dto.UsuarioRegistroDTO;
 import com.autenticacion.demo.Dto.UsuarioRespuestaDTO;
@@ -10,6 +11,7 @@ import com.autenticacion.demo.Services.UsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
@@ -27,6 +29,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         @Autowired
         private UsuarioRepository usuarioRepository;
 
+        @Autowired
+        private PasswordEncoder passwordEncoder;
+
         @Override
         public UsuarioRespuestaDTO registrarUsuario(UsuarioRegistroDTO dto) {
                 try {
@@ -41,9 +46,8 @@ public class UsuarioServiceImpl implements UsuarioService {
                         Usuario usuario = Usuario.builder()
                                         .nombre(dto.getNombre())
                                         .email(dto.getEmail())
-                                        .password(dto.getPassword()) // puedes encriptarlo si quieres
+                                        .password(passwordEncoder.encode(dto.getPassword())) // puedes encriptarlo si quieres
                                         .fechaRegistro(new Date())
-                                        .rol(dto.getRol())
                                         .estadoCuenta("Activo")
                                         .build();
 
@@ -54,7 +58,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                                         .id(guardado.getId())
                                         .nombre(guardado.getNombre())
                                         .email(guardado.getEmail())
-                                        .rol(guardado.getRol())
                                         .estadoCuenta(guardado.getEstadoCuenta())
                                         .build();
 
@@ -72,7 +75,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                                 .id(usuario.getId())
                                 .nombre(usuario.getNombre())
                                 .email(usuario.getEmail())
-                                .rol(usuario.getRol())
                                 .estadoCuenta(usuario.getEstadoCuenta())
                                 .build();
         }
@@ -96,5 +98,26 @@ public class UsuarioServiceImpl implements UsuarioService {
                                                 "Usuario con id " + id + " no encontrado"));
 
                 usuarioRepository.delete(usuario);
+        }
+
+        @Override
+public void cambiarPassword(CambioPasswordDTO dto) {
+    try {
+        // Firebase
+        UserRecord user = FirebaseAuth.getInstance().getUserByEmail(dto.getEmail());
+        FirebaseAuth.getInstance().updateUser(
+                new UserRecord.UpdateRequest(user.getUid()).setPassword(dto.getNuevaPassword())
+        );
+
+        // PostgreSQL
+        Usuario usuario = usuarioRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        usuario.setPassword(passwordEncoder.encode(dto.getNuevaPassword()));
+        usuarioRepository.save(usuario);
+
+    } catch (Exception e) {
+        throw new RuntimeException("Error al cambiar contraseña: " + e.getMessage());
+                }
         }
 }

@@ -1,28 +1,33 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  auth-backend:
-    build:
-      context: .
-    container_name: auth_backend
+  postgres:
+    image: postgres:13
+    container_name: retochimba-postgres
+    restart: always
     ports:
-      - "8080:8080"
+      - "5432:5432"
     environment:
-      - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME}
-      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
-      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
-      - SPRING_JPA_DDL_AUTO=${SPRING_JPA_DDL_AUTO}
-      - SPRING_JPA_SHOW_SQL=${SPRING_JPA_SHOW_SQL}
-      - SPRING_JPA_DIALECT=${SPRING_JPA_DIALECT}
+      POSTGRES_DB: authdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
     volumes:
-      - ./firebase.env:/app/firebase.env
-      - ./.env:/app/.env
-    networks:
-      - devNetworkArq
-    restart: unless-stopped
+      - postgres_data:/var/lib/postgresql/data
 
-networks:
-  devNetworkArq:
-    external: true
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: retochimba-pgadmin
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@retochimba.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
 
+volumes:
+  postgres_data:
+  pgadmin_data:

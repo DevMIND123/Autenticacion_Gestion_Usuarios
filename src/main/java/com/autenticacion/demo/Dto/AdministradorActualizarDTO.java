@@ -7,13 +7,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UsuarioRegistroDTO {
-    @NotBlank(message = "El nombre no puede ser nula")
+public class AdministradorActualizarDTO {
+    @NotBlank(message = "El nombre no puede ser nulo")
     private String nombre;
 
     @NotBlank(message = "El email no puede ser nulo")
     private String email;
-
-    @NotBlank(message = "La contraseña no puede estar en blanco")
-    private String password;
 }
