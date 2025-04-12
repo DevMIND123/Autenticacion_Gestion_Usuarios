@@ -2,7 +2,11 @@ package com.autenticacion.demo.Entities;
 
 import jakarta.persistence.*;
 import lombok.experimental.SuperBuilder;
+import lombok.*;
 
+@Data 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "administradores")
 @SuperBuilder

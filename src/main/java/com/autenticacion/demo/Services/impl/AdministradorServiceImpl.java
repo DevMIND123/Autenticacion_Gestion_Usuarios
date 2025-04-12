@@ -33,37 +33,49 @@ public class AdministradorServiceImpl implements AdministradorService {
         private PasswordEncoder passwordEncoder;
 
         @Override
-        public AdministradorRespuestaDTO registrarAdministrador(AdministradorRegistroDTO dto) {
-                try {
-                        // 1. Crear Administrador en Firebase
-                        UserRecord.CreateRequest request = new UserRecord.CreateRequest()
-                                        .setEmail(dto.getEmail())
-                                        .setPassword(dto.getPassword());
+public AdministradorRespuestaDTO registrarAdministrador(AdministradorRegistroDTO dto) {
+    try {
+        logger.info("📥 Iniciando registro de administrador...");
+        logger.info("📨 DTO recibido - nombre: {}, email: {}, rol: {}", 
+                    dto.getNombre(), dto.getEmail(), dto.getRol());
 
-                        UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
+        // 1. Crear Administrador en Firebase
+        UserRecord.CreateRequest request = new UserRecord.CreateRequest()
+                .setEmail(dto.getEmail())
+                .setPassword(dto.getPassword());
 
-                        // 2. Guardar en PostgreSQL
-                        Administrador administrador = Administrador.builder()
-                                        .nombre(dto.getNombre())
-                                        .email(dto.getEmail())
-                                        .password(passwordEncoder.encode(dto.getPassword()))
-                                        .estadoCuenta("Activo")
-                                        .build();
+        UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
+        logger.info("✅ Usuario creado en Firebase con UID: {}", userRecord.getUid());
 
-                        Administrador guardado = administradorRepository.save(administrador);
+        // 2. Guardar en PostgreSQL
+        Administrador administrador = Administrador.builder()
+                .nombre(dto.getNombre())
+                .email(dto.getEmail())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .estadoCuenta("Activo")
+                .rol(dto.getRol())
+                .build();
 
-                        // 3. Retornar DTO
-                        return AdministradorRespuestaDTO.builder()
-                                        .id(guardado.getId())
-                                        .nombre(guardado.getNombre())
-                                        .email(guardado.getEmail())
-                                        .estadoCuenta(guardado.getEstadoCuenta())
-                                        .build();
+        logger.info("🧱 Objeto Administrador construido: {}", administrador);
 
-                } catch (Exception e) {
-                        throw new RuntimeException("Error al registrar el administrador: " + e.getMessage());
-                }
+        Administrador guardado = administradorRepository.save(administrador);
+        logger.info("💾 Administrador guardado con ID: {} y rol: {}", guardado.getId(), guardado.getRol());
+
+        // 3. Retornar DTO
+        return AdministradorRespuestaDTO.builder()
+                .id(guardado.getId())
+                .nombre(guardado.getNombre())
+                .email(guardado.getEmail())
+                .estadoCuenta(guardado.getEstadoCuenta())
+                .rol(guardado.getRol()) // mejor usar el rol que quedó guardado
+                .build();
+
+    } catch (Exception e) {
+        logger.error("❌ Error al registrar el administrador: {}", e.getMessage());
+        throw new RuntimeException("Error al registrar el administrador: " + e.getMessage());
+         }
         }
+
 
         @Override
         public AdministradorRespuestaDTO obtenerAdministradorPorEmail(String email) {
