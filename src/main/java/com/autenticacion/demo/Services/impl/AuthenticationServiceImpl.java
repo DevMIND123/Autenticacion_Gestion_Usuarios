@@ -4,67 +4,35 @@ import com.autenticacion.demo.Dto.*;
 import com.autenticacion.demo.Entities.*;
 import com.autenticacion.demo.Repositories.*;
 import com.autenticacion.demo.Services.AuthenticationService;
-import com.autenticacion.demo.security.JwtService;
+import com.autenticacion.demo.Services.JwtService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
-
-    @Autowired private AuthenticationManager authenticationManager;
-    @Autowired private JwtService jwtService;
-    @Autowired private PasswordEncoder passwordEncoder;
-    @Autowired private ClienteRepository clienteRepository;
-    @Autowired private EmpresaRepository empresaRepository;
-    @Autowired private AdministradorRepository administradorRepository;
+    
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtService jwtService;
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @Override
     public JwtAuthenticationResponse login(LoginRequestDTO request) {
+        logger.info("PASOOOOOOOOOOOOOOOOOO");
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-
-        // Buscar en cada tipo de usuario
-        Cliente cliente = clienteRepository.findByEmail(request.getEmail()).orElse(null);
-        if (cliente != null) {
-            String token = jwtService.generateToken(cliente.getEmail());
-            return JwtAuthenticationResponse.builder()
-                    .token(token)
-                    .email(cliente.getEmail())
-                    .nombre(cliente.getNombre())
-                    .rol(cliente.getRol())
-                    .build();
-        }
-
-        Empresa empresa = empresaRepository.findByEmail(request.getEmail()).orElse(null);
-        if (empresa != null) {
-            String token = jwtService.generateToken(empresa.getEmail());
-            return JwtAuthenticationResponse.builder()
-                    .token(token)
-                    .email(empresa.getEmail())
-                    .nombre(empresa.getNombreEmpresa())
-                    .rol(empresa.getRol())
-                    .build();
-        }
-
-        Administrador admin = administradorRepository.findByEmail(request.getEmail()).orElse(null);
-        if (admin != null) {
-            String token = jwtService.generateToken(admin.getEmail());
-            return JwtAuthenticationResponse.builder()
-                    .token(token)
-                    .email(admin.getEmail())
-                    .nombre(admin.getNombre())
-                    .rol(admin.getRol())
-                    .build();
-        }
-
-        throw new UsernameNotFoundException("Usuario no encontrado");
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+                logger.info("PASOOOOOOOOOOOOOOOOOO22");
+                
+        Cliente cliente = clienteRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
+        String jwt = jwtService.generateToken(cliente);
+        return new JwtAuthenticationResponse(jwt, cliente.getEmail(), cliente.getRol());
     }
 }

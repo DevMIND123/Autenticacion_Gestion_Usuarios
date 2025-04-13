@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api.retochimba.com/administradores")
-@CrossOrigin(origins = "*")
 public class AdministradorController {
 
     @Autowired

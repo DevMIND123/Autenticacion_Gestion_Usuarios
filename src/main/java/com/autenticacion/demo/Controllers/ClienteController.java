@@ -7,20 +7,25 @@ import com.autenticacion.demo.Dto.ClienteRespuestaDTO;
 import com.autenticacion.demo.Services.ClienteService;
 
 import jakarta.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api.retochimba.com/clientes")
-@CrossOrigin(origins = "*")
 public class ClienteController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
 
     @Autowired
     private ClienteService clienteService;
 
     @PostMapping
     public ResponseEntity<ClienteRespuestaDTO> registrarCliente(@RequestBody @Valid ClienteRegistroDTO dto) {
+        logger.info("Registrando cliente con datos: {}", dto);
         return ResponseEntity.ok(clienteService.registrarCliente(dto));
     }
 

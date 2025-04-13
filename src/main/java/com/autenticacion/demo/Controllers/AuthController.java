@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api.retochimba.com/auth")
-@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
@@ -17,7 +16,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtAuthenticationResponse> login(@RequestBody @Valid LoginRequestDTO request) {
-        JwtAuthenticationResponse response = authenticationService.login(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(authenticationService.login(request));
     }
 }

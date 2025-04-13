@@ -5,9 +5,12 @@ import com.autenticacion.demo.Entities.Cliente;
 import com.autenticacion.demo.Entities.Rol;
 import com.autenticacion.demo.Repositories.ClienteRepository;
 import com.autenticacion.demo.Services.ClienteService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +23,13 @@ public class ClienteServiceImpl implements ClienteService {
     private ClienteRepository clienteRepository;
 
     @Autowired
+    @Lazy
     private PasswordEncoder passwordEncoder;
 
     @Override
     public ClienteRespuestaDTO registrarCliente(ClienteRegistroDTO dto) {
         Cliente cliente = Cliente.builder()
-                .nombre(dto.getNombre())
+                //.nombre(dto.getNombre())
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .estadoCuenta("Activo")
@@ -37,7 +41,7 @@ public class ClienteServiceImpl implements ClienteService {
 
         return ClienteRespuestaDTO.builder()
                 .id(guardado.getId())
-                .nombre(guardado.getNombre())
+                //.nombre(guardado.getNombre())
                 .email(guardado.getEmail())
                 .estadoCuenta(guardado.getEstadoCuenta())
                 .rol(dto.getRol())
@@ -54,7 +58,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public boolean actualizarCliente(Long id, ClienteActualizarDTO dto) {
-        return clienteRepository.actualizarCliente(id, dto.getNombre(), dto.getEmail()) > 0;
+        return clienteRepository.actualizarCliente(id, dto.getEmail()) > 0;
     }
 
     @Override
@@ -68,5 +72,15 @@ public class ClienteServiceImpl implements ClienteService {
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
         cliente.setPassword(passwordEncoder.encode(dto.getNuevaPassword()));
         clienteRepository.save(cliente);
+    }
+
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String email){
+                return clienteRepository.findByEmail(email)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            }
+        };
     }
 }

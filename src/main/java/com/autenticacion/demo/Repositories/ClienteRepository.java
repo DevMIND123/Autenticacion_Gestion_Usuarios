@@ -13,6 +13,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     Optional<Cliente> findByEmail(String email);
 
     @Modifying
-    @Query("UPDATE Cliente c SET c.nombre = :nombre, c.email = :email WHERE c.id = :id")
-    int actualizarCliente(@Param("id") Long id, @Param("nombre") String nombre, @Param("email") String email);
+    @Query("UPDATE Cliente c SET c.email = :email WHERE c.id = :id")
+    int actualizarCliente(@Param("id") Long id, @Param("email") String email);
 }
