@@ -30,6 +30,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .estadoCuenta("Activo")
                 .fechaRegistro(new Date())
+                .rol(Rol.CLIENTE)
                 .build();
 
         Cliente guardado = clienteRepository.save(cliente);

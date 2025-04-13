@@ -30,6 +30,7 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .telefono(dto.getTelefono())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .estadoCuenta("Activo")
+                .rol(Rol.EMPRESA)
                 .build();
 
         Empresa guardada = empresaRepository.save(empresa);

@@ -29,7 +29,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/api.retochimba.com/auth/**",
-                    "/api.retochimba.com/usuarios/**",
+                    "/api.retochimba.com/clientes/**",
                     "/api.retochimba.com/empresas/**",
                     "/api.retochimba.com/administradores/**"
                 ).permitAll()
