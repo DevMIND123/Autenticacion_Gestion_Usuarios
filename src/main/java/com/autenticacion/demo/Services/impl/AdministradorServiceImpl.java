@@ -4,7 +4,6 @@ import com.autenticacion.demo.Dto.*;
 import com.autenticacion.demo.Entities.Administrador;
 import com.autenticacion.demo.Repositories.AdministradorRepository;
 import com.autenticacion.demo.Services.AdministradorService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,9 +21,9 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public AdministradorRespuestaDTO registrarAdministrador(AdministradorRegistroDTO dto) {
         Administrador administrador = Administrador.builder()
-                .nombre(dto.getNombre())
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
+                .nombre(dto.getNombre())
                 .estadoCuenta("Activo")
                 .rol(dto.getRol())
                 .build();

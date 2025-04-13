@@ -14,9 +14,10 @@ public class JwtAuthenticationResponse {
     private Rol rol;
 
 
-    public JwtAuthenticationResponse(String token, String email, Rol rol) {
+    public JwtAuthenticationResponse(String token, String email, Rol rol, String nombre) {
         this.token = token;
         this.email = email;
         this.rol = rol;
+        this.nombre = nombre;
     }
 }

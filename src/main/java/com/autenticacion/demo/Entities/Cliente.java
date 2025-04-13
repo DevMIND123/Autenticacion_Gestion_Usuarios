@@ -23,13 +23,13 @@ public class Cliente implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //private String nombre;
-
     @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
     private String password;
+
+    private String nombre;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;

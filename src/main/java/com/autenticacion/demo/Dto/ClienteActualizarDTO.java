@@ -10,6 +10,9 @@ import lombok.*;
 public class ClienteActualizarDTO {
 
     @NotBlank
+    private String nombre;
+
+    @NotBlank
     @Email
     private String email;
 }

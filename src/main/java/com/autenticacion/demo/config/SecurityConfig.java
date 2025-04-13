@@ -30,6 +30,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
@@ -49,7 +50,9 @@ public class SecurityConfig {
         return http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/api.retochimba.com/auth/login", "/api.retochimba.com/clientes/**")
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api.retochimba.com/auth/login", "/api.retochimba.com/clientes/**",
+                                "/api.retochimba.com/administradores/**", "/api.retochimba.com/empresas/**")
                         .permitAll()
                         .anyRequest().authenticated()
 

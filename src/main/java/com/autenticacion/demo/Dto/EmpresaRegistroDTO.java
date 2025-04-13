@@ -10,6 +10,16 @@ import lombok.*;
 @Builder
 public class EmpresaRegistroDTO {
 
+    @Email
+    @NotBlank
+    private String email;
+
+    @NotBlank
+    private String password;
+
+    @NotBlank
+    private String direccion;
+
     @NotBlank
     private String nombreEmpresa;
 
@@ -19,18 +29,8 @@ public class EmpresaRegistroDTO {
     @NotBlank
     private String nombreRepresentante;
 
-    @Email
-    @NotBlank
-    private String email;
-
-    @NotBlank
-    private String direccion;
-
     @NotBlank
     private String telefono;
-
-    @NotBlank
-    private String password;
 
     @NotNull
     private Rol rol; // EMPRESA

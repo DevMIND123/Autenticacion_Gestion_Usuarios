@@ -3,7 +3,9 @@ package com.autenticacion.demo.Services.impl;
 import com.autenticacion.demo.Dto.*;
 import com.autenticacion.demo.Entities.Cliente;
 import com.autenticacion.demo.Entities.Rol;
+import com.autenticacion.demo.Repositories.AdministradorRepository;
 import com.autenticacion.demo.Repositories.ClienteRepository;
+import com.autenticacion.demo.Repositories.EmpresaRepository;
 import com.autenticacion.demo.Services.ClienteService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,13 @@ public class ClienteServiceImpl implements ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    
+    @Autowired
+    private EmpresaRepository empresaRepository;
+
+    @Autowired
+    private AdministradorRepository administradorRepository ;
+
     @Autowired
     @Lazy
     private PasswordEncoder passwordEncoder;
@@ -29,9 +38,9 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public ClienteRespuestaDTO registrarCliente(ClienteRegistroDTO dto) {
         Cliente cliente = Cliente.builder()
-                //.nombre(dto.getNombre())
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
+                .nombre(dto.getNombre())
                 .estadoCuenta("Activo")
                 .fechaRegistro(new Date())
                 .rol(Rol.CLIENTE)
@@ -41,7 +50,7 @@ public class ClienteServiceImpl implements ClienteService {
 
         return ClienteRespuestaDTO.builder()
                 .id(guardado.getId())
-                //.nombre(guardado.getNombre())
+                .nombre(guardado.getNombre())
                 .email(guardado.getEmail())
                 .estadoCuenta(guardado.getEstadoCuenta())
                 .rol(dto.getRol())
@@ -77,9 +86,12 @@ public class ClienteServiceImpl implements ClienteService {
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
             @Override
-            public UserDetails loadUserByUsername(String email){
+            public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
                 return clienteRepository.findByEmail(email)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                        .map(user -> (UserDetails) user)
+                        .or(() -> empresaRepository.findByEmail(email).map(user -> (UserDetails) user))
+                        .or(() -> administradorRepository.findByEmail(email).map(user -> (UserDetails) user))
+                        .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
             }
         };
     }

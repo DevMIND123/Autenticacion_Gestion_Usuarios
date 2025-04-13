@@ -1,6 +1,6 @@
 package com.autenticacion.demo.Dto;
 
-//import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Data
@@ -8,9 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class LoginRequestDTO {
-    //@Email @NotBlank
+    @Email 
+    @NotBlank
     private String email;
 
-    //@NotBlank
+    @NotBlank
     private String password;
 }

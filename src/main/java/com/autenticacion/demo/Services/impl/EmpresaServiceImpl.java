@@ -5,7 +5,6 @@ import com.autenticacion.demo.Entities.Empresa;
 import com.autenticacion.demo.Entities.Rol;
 import com.autenticacion.demo.Repositories.EmpresaRepository;
 import com.autenticacion.demo.Services.EmpresaService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,13 +21,13 @@ public class EmpresaServiceImpl implements EmpresaService {
     @Override
     public EmpresaRespuestaDTO registrarEmpresa(EmpresaRegistroDTO dto) {
         Empresa empresa = Empresa.builder()
+                .email(dto.getEmail())
+                .password(passwordEncoder.encode(dto.getPassword()))
                 .nombreEmpresa(dto.getNombreEmpresa())
                 .nit(dto.getNit())
                 .nombreRepresentante(dto.getNombreRepresentante())
-                .email(dto.getEmail())
                 .direccion(dto.getDireccion())
                 .telefono(dto.getTelefono())
-                .password(passwordEncoder.encode(dto.getPassword()))
                 .estadoCuenta("Activo")
                 .rol(Rol.EMPRESA)
                 .build();
@@ -50,9 +49,9 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     @Override
     public Long obtenerIdEmpresaPorEmail(String email) {
-    return empresaRepository.findByEmail(email)
-            .map(Empresa::getId)
-            .orElseThrow(() -> new RuntimeException("Empresa no encontrada"));
+        return empresaRepository.findByEmail(email)
+                .map(Empresa::getId)
+                .orElseThrow(() -> new RuntimeException("Empresa no encontrada"));
     }
 
     @Override
@@ -70,18 +69,18 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     @Override
     public void actualizarEmpresa(Long id, EmpresaActualizarDTO dto) {
-    Empresa empresa = empresaRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Empresa no encontrada con ID: " + id));
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Empresa no encontrada con ID: " + id));
 
-    empresa.setNombreEmpresa(dto.getNombreEmpresa());
-    empresa.setNit(dto.getNit());
-    empresa.setNombreRepresentante(dto.getNombreRepresentante());
-    empresa.setEmail(dto.getEmail());
-    empresa.setDireccion(dto.getDireccion());
-    empresa.setTelefono(dto.getTelefono());
-    empresa.setRol(dto.getRol());
+        empresa.setNombreEmpresa(dto.getNombreEmpresa());
+        empresa.setNit(dto.getNit());
+        empresa.setNombreRepresentante(dto.getNombreRepresentante());
+        empresa.setEmail(dto.getEmail());
+        empresa.setDireccion(dto.getDireccion());
+        empresa.setTelefono(dto.getTelefono());
+        empresa.setRol(dto.getRol());
 
-    empresaRepository.save(empresa);
-}
+        empresaRepository.save(empresa);
+    }
 
 }

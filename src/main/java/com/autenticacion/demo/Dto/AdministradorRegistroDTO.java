@@ -10,15 +10,15 @@ import lombok.*;
 @Builder
 public class AdministradorRegistroDTO {
 
-    @NotBlank
-    private String nombre;
-
     @Email
     @NotBlank
     private String email;
 
     @NotBlank
     private String password;
+
+    @NotBlank
+    private String nombre;
 
     @NotNull
     private Rol rol; // ADMINISTRADOR / SOPORTE / MARKETING
