@@ -9,7 +9,7 @@ public interface EmpresaService {
 
     EmpresaRespuestaDTO registrarEmpresa(EmpresaRegistroDTO dto);
 
-    EmpresaRespuestaDTO obtenerEmpresaPorEmail(String email);
+    Long obtenerIdEmpresaPorEmail(String email);
 
     void eliminarEmpresa(Long id);
 

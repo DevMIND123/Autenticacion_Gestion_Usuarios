@@ -25,10 +25,10 @@ public class EmpresaController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<EmpresaRespuestaDTO> obtenerEmpresaPorEmail(@PathVariable String email) {
-        return ResponseEntity.ok(empresaService.obtenerEmpresaPorEmail(email));
+    public Long obtenerIdEmpresaPorEmail(@PathVariable String email) {
+        return empresaService.obtenerIdEmpresaPorEmail(email);
     }
-
+    
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminarEmpresa(@PathVariable Long id) {
         empresaService.eliminarEmpresa(id);

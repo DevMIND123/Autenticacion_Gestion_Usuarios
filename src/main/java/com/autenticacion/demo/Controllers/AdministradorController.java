@@ -26,8 +26,8 @@ public class AdministradorController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<AdministradorRespuestaDTO> obtenerPorEmail(@PathVariable String email) {
-        return ResponseEntity.ok(administradorService.obtenerAdministradorPorEmail(email));
+    public Long obtenerIdAdministradorPorEmail(@PathVariable String email) {
+        return administradorService.obtenerIdAdministradorPorEmail(email);
     }
 
     @PatchMapping("/actualizar/{id}")

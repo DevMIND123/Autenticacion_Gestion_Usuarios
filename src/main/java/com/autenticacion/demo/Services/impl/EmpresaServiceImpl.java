@@ -49,20 +49,10 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public EmpresaRespuestaDTO obtenerEmpresaPorEmail(String email) {
-        Empresa empresa = empresaRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Empresa no encontrada"));
-        return EmpresaRespuestaDTO.builder()
-                .id(empresa.getId())
-                .nombreEmpresa(empresa.getNombreEmpresa())
-                .nit(empresa.getNit())
-                .nombreRepresentante(empresa.getNombreRepresentante())
-                .email(empresa.getEmail())
-                .direccion(empresa.getDireccion())
-                .telefono(empresa.getTelefono())
-                .estadoCuenta(empresa.getEstadoCuenta())
-                .rol(Rol.EMPRESA)
-                .build();
+    public Long obtenerIdEmpresaPorEmail(String email) {
+    return empresaRepository.findByEmail(email)
+            .map(Empresa::getId)
+            .orElseThrow(() -> new RuntimeException("Empresa no encontrada"));
     }
 
     @Override

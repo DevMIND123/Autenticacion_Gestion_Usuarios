@@ -45,17 +45,10 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public ClienteRespuestaDTO obtenerClientePorEmail(String email) {
-        Cliente cliente = clienteRepository.findByEmail(email)
+    public Long obtenerIdClientePorEmail(String email) {
+        return clienteRepository.findByEmail(email)
+                .map(Cliente::getId)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-
-        return ClienteRespuestaDTO.builder()
-                .id(cliente.getId())
-                .nombre(cliente.getNombre())
-                .email(cliente.getEmail())
-                .estadoCuenta(cliente.getEstadoCuenta())
-                .rol(Rol.CLIENTE)
-                .build();
     }
 
     @Override

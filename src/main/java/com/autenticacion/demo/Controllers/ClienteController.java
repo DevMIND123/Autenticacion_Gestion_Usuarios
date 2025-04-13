@@ -25,10 +25,10 @@ public class ClienteController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<ClienteRespuestaDTO> obtenerPorEmail(@PathVariable String email) {
-        return ResponseEntity.ok(clienteService.obtenerClientePorEmail(email));
+    public Long obtenerIdClientePorEmail(@PathVariable String email) {
+        return clienteService.obtenerIdClientePorEmail(email);
     }
-
+    
     @PatchMapping("/actualizar/{id}")
     public ResponseEntity<String> actualizarCliente(@PathVariable Long id,
             @RequestBody @Valid ClienteActualizarDTO dto) {

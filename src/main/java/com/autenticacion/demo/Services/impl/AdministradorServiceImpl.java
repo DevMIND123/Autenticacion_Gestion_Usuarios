@@ -41,16 +41,10 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
 
     @Override
-    public AdministradorRespuestaDTO obtenerAdministradorPorEmail(String email) {
-        Administrador admin = administradorRepository.findByEmail(email)
+    public Long obtenerIdAdministradorPorEmail(String email) {
+        return administradorRepository.findByEmail(email)
+                .map(Administrador::getId)
                 .orElseThrow(() -> new RuntimeException("Administrador no encontrado"));
-        return AdministradorRespuestaDTO.builder()
-                .id(admin.getId())
-                .nombre(admin.getNombre())
-                .email(admin.getEmail())
-                .estadoCuenta(admin.getEstadoCuenta())
-                .rol(admin.getRol())
-                .build();
     }
 
     @Override

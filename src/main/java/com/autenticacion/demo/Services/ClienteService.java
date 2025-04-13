@@ -9,7 +9,7 @@ public interface ClienteService {
 
     ClienteRespuestaDTO registrarCliente(ClienteRegistroDTO dto);
 
-    ClienteRespuestaDTO obtenerClientePorEmail(String email);
+    Long obtenerIdClientePorEmail(String email);
 
     boolean actualizarCliente(Long id, ClienteActualizarDTO dto);
 
