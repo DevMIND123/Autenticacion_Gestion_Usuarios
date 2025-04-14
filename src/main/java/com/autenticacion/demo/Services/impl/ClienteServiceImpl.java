@@ -7,6 +7,8 @@ import com.autenticacion.demo.Repositories.AdministradorRepository;
 import com.autenticacion.demo.Repositories.ClienteRepository;
 import com.autenticacion.demo.Repositories.EmpresaRepository;
 import com.autenticacion.demo.Services.ClienteService;
+import com.autenticacion.demo.Services.KafkaProducerService;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -24,6 +26,8 @@ public class ClienteServiceImpl implements ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private KafkaProducerService kafkaProducer;
     
     @Autowired
     private EmpresaRepository empresaRepository;
@@ -48,6 +52,11 @@ public class ClienteServiceImpl implements ClienteService {
 
         Cliente guardado = clienteRepository.save(cliente);
 
+        // 🔁 ENVIAR EVENTO A KAFKA
+        String mensaje = String.format("{\"idUsuario\": %d, \"nombre\": \"%s\"}",
+                guardado.getId(), guardado.getNombre());
+        kafkaProducer.enviarMensaje(mensaje);
+
         return ClienteRespuestaDTO.builder()
                 .id(guardado.getId())
                 .nombre(guardado.getNombre())
@@ -56,7 +65,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .rol(dto.getRol())
                 .build();
     }
-
+    
     @Override
     public Long obtenerIdClientePorEmail(String email) {
         return clienteRepository.findByEmail(email)

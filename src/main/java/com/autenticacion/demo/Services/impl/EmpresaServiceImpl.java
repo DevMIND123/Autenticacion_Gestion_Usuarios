@@ -5,6 +5,8 @@ import com.autenticacion.demo.Entities.Empresa;
 import com.autenticacion.demo.Entities.Rol;
 import com.autenticacion.demo.Repositories.EmpresaRepository;
 import com.autenticacion.demo.Services.EmpresaService;
+import com.autenticacion.demo.Services.KafkaProducerService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     @Autowired
     private EmpresaRepository empresaRepository;
+
+    @Autowired
+    private KafkaProducerService kafkaProducer;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -34,6 +39,11 @@ public class EmpresaServiceImpl implements EmpresaService {
 
         Empresa guardada = empresaRepository.save(empresa);
 
+        // ✅ Enviar evento a Kafka
+        String mensaje = String.format("{\"idUsuario\": %d, \"nombre\": \"%s\"}",
+                guardada.getId(), guardada.getNombreEmpresa()); // o .getNombreRepresentante()
+        kafkaProducer.enviarMensaje(mensaje);
+
         return EmpresaRespuestaDTO.builder()
                 .id(guardada.getId())
                 .nombreEmpresa(guardada.getNombreEmpresa())
@@ -46,6 +56,7 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .rol(dto.getRol())
                 .build();
     }
+
 
     @Override
     public Long obtenerIdEmpresaPorEmail(String email) {
