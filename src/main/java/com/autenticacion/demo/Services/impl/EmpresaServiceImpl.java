@@ -40,8 +40,8 @@ public class EmpresaServiceImpl implements EmpresaService {
         Empresa guardada = empresaRepository.save(empresa);
 
         // ✅ Enviar evento a Kafka
-        String mensaje = String.format("{\"idUsuario\": %d, \"nombre\": \"%s\"}",
-                guardada.getId(), guardada.getNombreEmpresa()); // o .getNombreRepresentante()
+        String mensaje = String.format("{\"id\": %d, \"nombre\": \"%s\", \"tipo\": \"%s\"}",
+        guardada.getId(), guardada.getNombreEmpresa(), guardada.getRol().name());
         kafkaProducer.enviarMensaje(mensaje);
 
         return EmpresaRespuestaDTO.builder()
