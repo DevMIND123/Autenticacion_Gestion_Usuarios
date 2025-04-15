@@ -9,9 +9,9 @@ public interface AdministradorService {
 
     AdministradorRespuestaDTO registrarAdministrador(AdministradorRegistroDTO dto);
 
-    AdministradorRespuestaDTO obtenerAdministradorPorEmail(String email);
+    Long obtenerIdAdministradorPorEmail(String email);
 
-    boolean actualizarAdministrador(Long id, AdministradorActualizarDTO usuario);
+    boolean actualizarAdministrador(Long id, AdministradorActualizarDTO dto);
 
     void eliminarAdministrador(Long id);
 

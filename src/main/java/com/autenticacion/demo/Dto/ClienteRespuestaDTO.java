@@ -7,14 +7,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmpresaRespuestaDTO {
+public class ClienteRespuestaDTO {
     private Long id;
-    private String nombreEmpresa;
-    private String nit;
-    private String nombreRepresentante;
+    private String nombre;
     private String email;
-    private String direccion;
-    private String telefono;
     private String estadoCuenta;
     private Rol rol;
 }

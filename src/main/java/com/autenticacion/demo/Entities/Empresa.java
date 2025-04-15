@@ -1,5 +1,12 @@
 package com.autenticacion.demo.Entities;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,32 +16,66 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Empresa {
+public class Empresa implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_documento")
-    private TipoDocumento tipoDocumento;
-
-    @Column(name = "numero_documento", unique = true)
-    private String numeroDocumento;
-
-    @Column(name = "nombre_empresa")
-    private String nombreEmpresa;
-
-    @Column(name = "nombre_representante")
-    private String nombreRepresentante;
-
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
+
+    @Column(name = "nombre_empresa", nullable = false)
+    private String nombreEmpresa;
+
+    @Column(name = "nit", unique = true, nullable = false)
+    private String nit;
+
+    @Column(name = "nombre_representante", nullable = false)
+    private String nombreRepresentante;
+
+    @Column(nullable = false)
+    private String direccion;
+
+    @Column(nullable = false)
+    private String telefono;
 
     private String estadoCuenta;
 
-    @Column(name = "url_logo")
-    private String urlLogo; // aquí guardaremos la URL de la imagen subida
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
+
+    
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(rol.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

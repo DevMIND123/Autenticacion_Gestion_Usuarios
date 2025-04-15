@@ -1,22 +1,23 @@
 package com.autenticacion.demo.Entities;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 @Entity
-@Table(name = "administradores")
+@Table(name = "clientes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Administrador implements UserDetails{
+public class Cliente implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,12 +31,14 @@ public class Administrador implements UserDetails{
 
     private String nombre;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaRegistro;
+
     private String estadoCuenta;
 
     @Enumerated(EnumType.STRING)
     private Rol rol;
 
-    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(rol.name()));

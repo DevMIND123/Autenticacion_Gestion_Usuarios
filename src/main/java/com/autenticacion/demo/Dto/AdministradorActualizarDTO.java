@@ -1,6 +1,6 @@
 package com.autenticacion.demo.Dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Data
@@ -8,9 +8,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class AdministradorActualizarDTO {
-    @NotBlank(message = "El nombre no puede ser nulo")
+
+    @NotBlank
     private String nombre;
 
-    @NotBlank(message = "El email no puede ser nulo")
+    @NotBlank
+    @Email
     private String email;
 }
