@@ -7,6 +7,7 @@ Este documento describe el proceso para compilar, generar y ejecutar el artefact
 - Tener instalado **Java** (versión requerida por el proyecto)
 - Tener instalado **Maven**
 - Clonar este repositorio
+- Asegurarse de tener el archivo **.env** en el directorio raíz del proyecto, el cual contiene las variables de entorno necesarias para la conexión a la base de datos y configuraciones relacionadas con JWT.
 
 ## Generación del artefacto
 
@@ -33,7 +34,7 @@ mvn package
 También es posible ejecutar directamente:
 
 ```bash
-mvn clean install
+mvn clean install package
 ```
 
 Este comando limpia versiones anteriores, instala las dependencias y empaqueta el proyecto generando el artefacto.
@@ -53,9 +54,14 @@ Para ejecutar el artefacto y dejar la aplicación escuchando, se utiliza el `Doc
 
 Al construir y ejecutar el contenedor Docker, la plataforma quedará activa y en escucha.
 
+## Configuración de CORS
+
+Para permitir la comunicación entre el frontend, la máquina de pruebas y el backend, se realizó la configuración de **CORS** en el entorno. Esto se hizo modificando la clase `SecurityConfig.java`, donde se incluyeron los orígenes correspondientes para habilitar el acceso desde las plataformas autorizadas.
+
 ## Uso de Docker Compose
 
 Este proyecto incluye un archivo `docker-compose.yml` pensado para el **entorno de desarrollo**.  
 Si se desea realizar un despliegue local que requiera una base de datos, es necesario sustituir este archivo por la versión manejada por el equipo de desarrollo.
 
 Adicionalmente, se debe ajustar el archivo `application.properties` para que apunte a la base de datos local correspondiente.
+
