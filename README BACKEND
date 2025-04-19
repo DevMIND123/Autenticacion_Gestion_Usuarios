@@ -29,3 +29,7 @@ Para ejecutar el artefacto y dejar la aplicación escuchando, se utiliza el Dock
 En este archivo ya se encuentra el comando que inicializa el .jar generado por Maven.
 Al construir y ejecutar el contenedor Docker, la plataforma quedará activa y en escucha.
 
+USO DE DOCKER COMPOSE
+Este proyecto incluye un archivo docker-compose.yml pensado para el entorno de desarrollo. 
+Si se desea realizar un despliegue local que requiera una base de datos, es necesario sustituir este archivo por la versión manejada por el equipo de desarrollo.
+Adicionalmente, se debe ajustar el archivo application.properties para que apunte a la base de datos local correspondiente.
