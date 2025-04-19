@@ -1,65 +1,59 @@
-# Manual del Backend
+# Frontend
 
-Este documento describe el proceso para compilar, generar y ejecutar el artefacto del backend de la plataforma.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.7.
 
-## Requisitos previos
+## Development server
 
-- Tener instalado **Java** (versión requerida por el proyecto)
-- Tener instalado **Maven**
-- Clonar este repositorio
-
-## Generación del artefacto
-
-Una vez clonado el repositorio, se deben seguir los siguientes pasos para generar el artefacto:
-
-1. **Limpiar versiones anteriores del proyecto:**
+To start a local development server, run:
 
 ```bash
-mvn clean
+ng serve
 ```
 
-2. **Instalar las dependencias necesarias del proyecto:**
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+## Code scaffolding
+
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
 ```bash
-mvn install
+ng generate component component-name
 ```
 
-3. **Empaquetar el proyecto para generar el artefacto:**
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
 ```bash
-mvn package
+ng generate --help
 ```
 
-También es posible ejecutar directamente:
+## Building
+
+To build the project run:
 
 ```bash
-mvn clean install
+ng build
 ```
 
-Este comando limpia versiones anteriores, instala las dependencias y empaqueta el proyecto generando el artefacto.
+This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Ubicación del artefacto
+## Running unit tests
 
-El artefacto generado es un archivo `.jar` con sufijo `-SNAPSHOT.jar`. Este se encuentra dentro de la carpeta `target`.
+To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
 
-Ejemplo:
+```bash
+ng test
 ```
-target/nombre-del-proyecto-0.0.1-SNAPSHOT.jar
+
+## Running end-to-end tests
+
+For end-to-end (e2e) testing, run:
+
+```bash
+ng e2e
 ```
 
-## Ejecución del artefacto
+Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-Para ejecutar el artefacto y dejar la aplicación escuchando, se utiliza el `Dockerfile` incluido en el proyecto. En este archivo ya se encuentra el comando que inicializa el `.jar` generado por Maven.
+## Additional Resources
 
-Al construir y ejecutar el contenedor Docker, la plataforma quedará activa y en escucha.
-
-## Uso de Docker Compose
-
-Este proyecto incluye un archivo `docker-compose.yml` pensado para el **entorno de desarrollo**.  
-Si se desea realizar un despliegue local que requiera una base de datos, es necesario sustituir este archivo por la versión manejada por el equipo de desarrollo.
-
-Adicionalmente, se debe ajustar el archivo `application.properties` para que apunte a la base de datos local correspondiente.
-
----
-
-Este es el procedimiento básico para compilar y ejecutar el backend de esta plataforma.
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
