@@ -59,7 +59,3 @@ Este proyecto incluye un archivo `docker-compose.yml` pensado para el **entorno 
 Si se desea realizar un despliegue local que requiera una base de datos, es necesario sustituir este archivo por la versión manejada por el equipo de desarrollo.
 
 Adicionalmente, se debe ajustar el archivo `application.properties` para que apunte a la base de datos local correspondiente.
-
----
-
-Este es el procedimiento básico para compilar y ejecutar el backend de esta plataforma.
