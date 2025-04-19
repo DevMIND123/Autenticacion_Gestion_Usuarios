@@ -1,0 +1,31 @@
+MANUAL DEL BACKEND
+Este documento describe el proceso para compilar, generar y ejecutar el artefacto del backend de la plataforma.
+
+Requisitos previos:
+-> Tener instalado Java (versión requerida por el proyecto)
+-> Tener instalado Maven
+-> Clonar este repositorio
+
+GENERACIÓN DEL ARTEFACTO
+Una vez clonado el repositorio, se deben seguir los siguientes pasos para generar el artefacto, mediante los siguientes comandos:
+
+1. Limpiar versiones anteriores del proyecto:
+mvn clean
+
+2. Instalar las dependencias necesarias del proyecto:
+mvn install
+
+3. Empaquetar el proyecto para generar el artefacto:
+mvn package
+También es posible ejecutar directamente:
+mvn clean install
+Este comando limpia versiones anteriores, instala las dependencias y empaqueta el proyecto generando el artefacto.
+
+UBICACION DEL ARTEFACTO
+El artefacto generado es un archivo .jar con sufijo -SNAPSHOT.jar. Este se encuentra dentro de la carpeta target.
+
+EJECUCIÓN DEL ARTEFACTO
+Para ejecutar el artefacto y dejar la aplicación escuchando, se utiliza el Dockerfile incluido en el proyecto. 
+En este archivo ya se encuentra el comando que inicializa el .jar generado por Maven.
+Al construir y ejecutar el contenedor Docker, la plataforma quedará activa y en escucha.
+
