@@ -1,35 +1,65 @@
-MANUAL DEL BACKEND
+# Manual del Backend
+
 Este documento describe el proceso para compilar, generar y ejecutar el artefacto del backend de la plataforma.
 
-Requisitos previos:
--> Tener instalado Java (versión requerida por el proyecto)
--> Tener instalado Maven
--> Clonar este repositorio
+## Requisitos previos
 
-GENERACIÓN DEL ARTEFACTO
-Una vez clonado el repositorio, se deben seguir los siguientes pasos para generar el artefacto, mediante los siguientes comandos:
+- Tener instalado **Java** (versión requerida por el proyecto)
+- Tener instalado **Maven**
+- Clonar este repositorio
 
-1. Limpiar versiones anteriores del proyecto:
+## Generación del artefacto
+
+Una vez clonado el repositorio, se deben seguir los siguientes pasos para generar el artefacto:
+
+1. **Limpiar versiones anteriores del proyecto:**
+
+```bash
 mvn clean
+```
 
-2. Instalar las dependencias necesarias del proyecto:
+2. **Instalar las dependencias necesarias del proyecto:**
+
+```bash
 mvn install
+```
 
-3. Empaquetar el proyecto para generar el artefacto:
+3. **Empaquetar el proyecto para generar el artefacto:**
+
+```bash
 mvn package
+```
+
 También es posible ejecutar directamente:
+
+```bash
 mvn clean install
+```
+
 Este comando limpia versiones anteriores, instala las dependencias y empaqueta el proyecto generando el artefacto.
 
-UBICACION DEL ARTEFACTO
-El artefacto generado es un archivo .jar con sufijo -SNAPSHOT.jar. Este se encuentra dentro de la carpeta target.
+## Ubicación del artefacto
 
-EJECUCIÓN DEL ARTEFACTO
-Para ejecutar el artefacto y dejar la aplicación escuchando, se utiliza el Dockerfile incluido en el proyecto. 
-En este archivo ya se encuentra el comando que inicializa el .jar generado por Maven.
+El artefacto generado es un archivo `.jar` con sufijo `-SNAPSHOT.jar`. Este se encuentra dentro de la carpeta `target`.
+
+Ejemplo:
+```
+target/nombre-del-proyecto-0.0.1-SNAPSHOT.jar
+```
+
+## Ejecución del artefacto
+
+Para ejecutar el artefacto y dejar la aplicación escuchando, se utiliza el `Dockerfile` incluido en el proyecto. En este archivo ya se encuentra el comando que inicializa el `.jar` generado por Maven.
+
 Al construir y ejecutar el contenedor Docker, la plataforma quedará activa y en escucha.
 
-USO DE DOCKER COMPOSE
-Este proyecto incluye un archivo docker-compose.yml pensado para el entorno de desarrollo. 
+## Uso de Docker Compose
+
+Este proyecto incluye un archivo `docker-compose.yml` pensado para el **entorno de desarrollo**.  
 Si se desea realizar un despliegue local que requiera una base de datos, es necesario sustituir este archivo por la versión manejada por el equipo de desarrollo.
-Adicionalmente, se debe ajustar el archivo application.properties para que apunte a la base de datos local correspondiente.
+
+Adicionalmente, se debe ajustar el archivo `application.properties` para que apunte a la base de datos local correspondiente.
+
+---
+
+Este es el procedimiento básico para compilar y ejecutar el backend de esta plataforma.
