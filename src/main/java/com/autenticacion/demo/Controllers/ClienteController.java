@@ -8,6 +8,9 @@ import com.autenticacion.demo.Services.ClienteService;
 
 import jakarta.validation.Valid;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +32,36 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.registrarCliente(dto));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteRespuestaDTO> obtenerClientePorId(@PathVariable Long id) {
+        logger.info("Obteniendo cliente con ID: {}", id);
+        return ResponseEntity.ok(clienteService.obtenerClientePorId(id));
+    }
+
     @GetMapping("/email/{email}")
     public Long obtenerIdClientePorEmail(@PathVariable String email) {
         return clienteService.obtenerIdClientePorEmail(email);
     }
+
     
     @PatchMapping("/actualizar/{id}")
-    public ResponseEntity<String> actualizarCliente(@PathVariable Long id,
+    public ResponseEntity<Map<String, String>> actualizarCliente(
+            @PathVariable Long id,
             @RequestBody @Valid ClienteActualizarDTO dto) {
+
         boolean actualizado = clienteService.actualizarCliente(id, dto);
-        return actualizado ?
-                ResponseEntity.ok("Cliente actualizado correctamente.") :
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado.");
+
+        Map<String, String> response = new HashMap<>();
+
+        if (actualizado) {
+            response.put("mensaje", "Cliente actualizado correctamente.");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("error", "Cliente no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
+
 
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminarCliente(@PathVariable Long id) {
