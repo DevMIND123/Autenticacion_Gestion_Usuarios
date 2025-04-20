@@ -16,4 +16,6 @@ public interface EmpresaService {
     void cambiarPassword(CambioPasswordDTO dto);
 
     void actualizarEmpresa(Long id, EmpresaActualizarDTO dto);
+
+    EmpresaRespuestaDTO obtenerEmpresaPorId(Long id);
 }
