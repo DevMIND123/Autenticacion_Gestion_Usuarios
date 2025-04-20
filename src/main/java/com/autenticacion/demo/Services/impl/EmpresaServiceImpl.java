@@ -88,9 +88,7 @@ public class EmpresaServiceImpl implements EmpresaService {
         empresa.setNit(dto.getNit());
         empresa.setNombreRepresentante(dto.getNombreRepresentante());
         empresa.setEmail(dto.getEmail());
-        empresa.setDireccion(dto.getDireccion());
-        empresa.setTelefono(dto.getTelefono());
-        empresa.setRol(dto.getRol());
+
 
         empresaRepository.save(empresa);
     }

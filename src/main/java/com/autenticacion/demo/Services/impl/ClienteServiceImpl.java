@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
@@ -76,7 +77,18 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public boolean actualizarCliente(Long id, ClienteActualizarDTO dto) {
-        return clienteRepository.actualizarCliente(id, dto.getEmail()) > 0;
+        Optional<Cliente> optionalCliente = clienteRepository.findById(id);
+
+        if (optionalCliente.isEmpty()) {
+            return false;
+        }
+
+        Cliente cliente = optionalCliente.get();
+        cliente.setNombre(dto.getNombre());
+        cliente.setEmail(dto.getEmail());
+
+        clienteRepository.save(cliente);
+        return true;
     }
 
     @Override
@@ -103,5 +115,18 @@ public class ClienteServiceImpl implements ClienteService {
                         .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
             }
         };
+    }
+
+    @Override
+    public ClienteRespuestaDTO obtenerClientePorId(Long id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + id));
+        return ClienteRespuestaDTO.builder()
+                .id(cliente.getId())
+                .nombre(cliente.getNombre())
+                .email(cliente.getEmail())
+                .estadoCuenta(cliente.getEstadoCuenta())
+                .rol(cliente.getRol())
+                .build();
     }
 }
