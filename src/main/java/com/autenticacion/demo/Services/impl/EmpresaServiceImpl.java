@@ -5,9 +5,6 @@ import com.autenticacion.demo.Entities.Empresa;
 import com.autenticacion.demo.Entities.Rol;
 import com.autenticacion.demo.Repositories.EmpresaRepository;
 import com.autenticacion.demo.Services.EmpresaService;
-import com.autenticacion.demo.Services.KafkaProducerService;
-
-import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,9 +14,6 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     @Autowired
     private EmpresaRepository empresaRepository;
-
-    @Autowired
-    private KafkaProducerService kafkaProducer;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -40,11 +34,6 @@ public class EmpresaServiceImpl implements EmpresaService {
 
         Empresa guardada = empresaRepository.save(empresa);
 
-        // ✅ Enviar evento a Kafka
-        String mensaje = String.format("{\"id\": %d, \"nombre\": \"%s\", \"tipo\": \"%s\"}",
-        guardada.getId(), guardada.getNombreEmpresa(), guardada.getRol().name());
-        kafkaProducer.enviarMensaje(mensaje);
-
         return EmpresaRespuestaDTO.builder()
                 .id(guardada.getId())
                 .nombreEmpresa(guardada.getNombreEmpresa())
@@ -57,7 +46,6 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .rol(dto.getRol())
                 .build();
     }
-
 
     @Override
     public Long obtenerIdEmpresaPorEmail(String email) {
@@ -88,27 +76,11 @@ public class EmpresaServiceImpl implements EmpresaService {
         empresa.setNit(dto.getNit());
         empresa.setNombreRepresentante(dto.getNombreRepresentante());
         empresa.setEmail(dto.getEmail());
-
+        empresa.setDireccion(dto.getDireccion());
+        empresa.setTelefono(dto.getTelefono());
+        empresa.setRol(dto.getRol());
 
         empresaRepository.save(empresa);
     }
-
-    @Override
-    public EmpresaRespuestaDTO obtenerEmpresaPorId(Long id) {
-        Empresa empresa = empresaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Empresa no encontrada con ID: " + id));
-        return EmpresaRespuestaDTO.builder()
-                .id(empresa.getId())
-                .nombreEmpresa(empresa.getNombreEmpresa())
-                .nit(empresa.getNit())
-                .nombreRepresentante(empresa.getNombreRepresentante())
-                .email(empresa.getEmail())
-                .direccion(empresa.getDireccion())
-                .telefono(empresa.getTelefono())
-                .estadoCuenta(empresa.getEstadoCuenta())
-                .rol(empresa.getRol())
-                .build();
-    }
-
 
 }

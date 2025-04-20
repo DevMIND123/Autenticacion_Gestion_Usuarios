@@ -7,10 +7,6 @@ import com.autenticacion.demo.Dto.EmpresaRespuestaDTO;
 import com.autenticacion.demo.Services.EmpresaService;
 
 import jakarta.validation.Valid;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +21,6 @@ public class EmpresaController {
     @PostMapping
     public ResponseEntity<EmpresaRespuestaDTO> registrarEmpresa(@RequestBody @Valid EmpresaRegistroDTO dto) {
         return ResponseEntity.ok(empresaService.registrarEmpresa(dto));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<EmpresaRespuestaDTO> obtenerEmpresaPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(empresaService.obtenerEmpresaPorId(id));
     }
 
     @GetMapping("/email/{email}")
@@ -50,15 +41,8 @@ public class EmpresaController {
     }
 
     @PatchMapping("/actualizar/{id}")
-    public ResponseEntity<Map<String, String>> actualizarEmpresa(
-            @PathVariable Long id,
-            @RequestBody @Valid EmpresaActualizarDTO dto) {
-
+    public ResponseEntity<String> actualizarEmpresa(@PathVariable Long id, @RequestBody @Valid EmpresaActualizarDTO dto) {
         empresaService.actualizarEmpresa(id, dto);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("mensaje", "Empresa actualizada correctamente.");
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok("Empresa actualizada correctamente.");
     }
-
 }
