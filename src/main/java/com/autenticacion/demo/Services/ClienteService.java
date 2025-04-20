@@ -19,7 +19,5 @@ public interface ClienteService {
 
     void cambiarPassword(CambioPasswordDTO dto);
 
-    UserDetailsService userDetailsService();
-
-    ClienteRespuestaDTO obtenerClientePorId(Long id);
+     UserDetailsService userDetailsService();
 }

@@ -5,9 +5,6 @@ import com.autenticacion.demo.Entities.Administrador;
 import com.autenticacion.demo.Repositories.AdministradorRepository;
 import com.autenticacion.demo.Services.AdministradorService;
 import jakarta.transaction.Transactional;
-
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,19 +49,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     @Transactional
     public boolean actualizarAdministrador(Long id, AdministradorActualizarDTO dto) {
-        Optional<Administrador> optionalAdministrador = administradorRepository.findById(id);
-
-        if (optionalAdministrador.isEmpty()) {
-            return false;
-        }
-
-        Administrador admin = optionalAdministrador.get();
-        admin.setNombre(dto.getNombre());
-        admin.setEmail(dto.getEmail());
-
-        administradorRepository.save(admin); // Guarda los cambios
-
-        return true;
+        return administradorRepository.actualizarAdministrador(id, dto.getNombre(), dto.getEmail()) > 0;
     }
 
     @Override
@@ -79,18 +64,4 @@ public class AdministradorServiceImpl implements AdministradorService {
         admin.setPassword(passwordEncoder.encode(dto.getNuevaPassword()));
         administradorRepository.save(admin);
     }
-
-    @Override
-    public AdministradorRespuestaDTO obtenerAdministradorPorId(Long id) {
-        Administrador admin = administradorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Administrador no encontrado"));
-        return AdministradorRespuestaDTO.builder()
-                .id(admin.getId())
-                .nombre(admin.getNombre())
-                .email(admin.getEmail())
-                .estadoCuenta(admin.getEstadoCuenta())
-                .rol(admin.getRol())
-                .build();
-    }
-    
 }
