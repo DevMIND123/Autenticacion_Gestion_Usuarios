@@ -23,6 +23,11 @@ public class EmpresaController {
         return ResponseEntity.ok(empresaService.registrarEmpresa(dto));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EmpresaRespuestaDTO> obtenerEmpresaPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(empresaService.obtenerEmpresaPorId(id));
+    }
+
     @GetMapping("/email/{email}")
     public Long obtenerIdEmpresaPorEmail(@PathVariable String email) {
         return empresaService.obtenerIdEmpresaPorEmail(email);

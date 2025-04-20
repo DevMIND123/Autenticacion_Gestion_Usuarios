@@ -7,6 +7,7 @@ import com.autenticacion.demo.Repositories.EmpresaRepository;
 import com.autenticacion.demo.Services.EmpresaService;
 import com.autenticacion.demo.Services.KafkaProducerService;
 
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -93,5 +94,23 @@ public class EmpresaServiceImpl implements EmpresaService {
 
         empresaRepository.save(empresa);
     }
+
+    @Override
+    public EmpresaRespuestaDTO obtenerEmpresaPorId(Long id) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Empresa no encontrada con ID: " + id));
+        return EmpresaRespuestaDTO.builder()
+                .id(empresa.getId())
+                .nombreEmpresa(empresa.getNombreEmpresa())
+                .nit(empresa.getNit())
+                .nombreRepresentante(empresa.getNombreRepresentante())
+                .email(empresa.getEmail())
+                .direccion(empresa.getDireccion())
+                .telefono(empresa.getTelefono())
+                .estadoCuenta(empresa.getEstadoCuenta())
+                .rol(empresa.getRol())
+                .build();
+    }
+
 
 }
