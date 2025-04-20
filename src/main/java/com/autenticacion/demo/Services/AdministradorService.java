@@ -16,4 +16,6 @@ public interface AdministradorService {
     void eliminarAdministrador(Long id);
 
     void cambiarPassword(CambioPasswordDTO dto);
+
+    AdministradorRespuestaDTO obtenerAdministradorPorId(Long id);
 }
