@@ -25,6 +25,24 @@ class EmpresaControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Caso de prueba para el método registrarEmpresa en la clase EmpresaController.
+     * 
+     * Esta prueba verifica lo siguiente:
+     * El método registrarEmpresa del controlador devuelve una respuesta no nula.
+     * La respuesta coincide con la ResponseEntity esperada que contiene el objeto EmpresaRespuestaDTO.
+     * El método registrarEmpresa del EmpresaService se invoca exactamente una vez con el parámetro correcto.
+     * 
+     * Configuración de la prueba:
+     * Se crea un objeto EmpresaRegistroDTO falso para simular los datos de entrada.
+     * Se crea un objeto mock EmpresaRespuestaDTO para simular la respuesta del servicio.
+     * Se simula el comportamiento del método registrarEmpresa del EmpresaService para devolver la respuesta simulada.
+     * 
+     * Afirmaciones:
+     * La respuesta del controlador no es nula.
+     * La respuesta coincide con la ResponseEntity esperada con el mock EmpresaRespuestaDTO.
+     * El método registrarEmpresa del servicio se llama exactamente una vez con el mock EmpresaRegistroDTO.
+     */
     @Test
     void testRegistrarEmpresa() {
         EmpresaRegistroDTO dto = new EmpresaRegistroDTO();
@@ -38,6 +56,18 @@ class EmpresaControllerTest {
         verify(empresaService, times(1)).registrarEmpresa(dto);
     }
 
+    /**
+     * Caso de prueba para el método {@code obtenerIdEmpresaPorEmail} en la clase 
+     * {@code EmpresaController}.
+     * 
+     * Esta prueba verifica que el método obtiene correctamente el ID de una empresa
+     * basándose en la dirección de correo electrónico proporcionada mediante:
+     * - Simulando el comportamiento del {@code empresaService} para devolver un ID predefinido.
+     * - Asegurando que el ID devuelto no es nulo.
+     * - Comprobando que el ID devuelto coincide con el valor esperado.
+     * - Verificar que el método {@code empresaService.obtenerIdEmpresaPorEmail} 
+     * se llama exactamente una vez con el parámetro de correo electrónico correcto.
+     */
     @Test
     void testObtenerIdEmpresaPorEmail() {
         String email = "test@example.com";
@@ -51,6 +81,14 @@ class EmpresaControllerTest {
         verify(empresaService, times(1)).obtenerIdEmpresaPorEmail(email);
     }
 
+    /**
+     * Caso de prueba para el método eliminarEmpresa en EmpresaController.
+     * 
+     * Esta prueba verifica que el método eliminarEmpresa:
+     * 1. Devuelve un objeto ResponseEntity no nulo.
+     * 2. Responde con un estado «204 No Content» cuando la eliminación se realiza correctamente.
+     * 3. Invoca el método eliminarEmpresa del EmpresaService exactamente una vez con el ID correcto.
+     */
     @Test
     void testEliminarEmpresa() {
         Long id = 1L;
@@ -62,6 +100,14 @@ class EmpresaControllerTest {
         verify(empresaService, times(1)).eliminarEmpresa(id);
     }
 
+    /**
+     * Caso de prueba para el método cambiarContraseña de la clase EmpresaController.
+     * 
+     * Esta prueba verifica lo siguiente:
+     * - La respuesta del método cambiarContraseña no es nula.
+     * - La respuesta coincide con el mensaje de éxito esperado: «Contraseña actualizada correctamente».
+     * - El método cambiarContraseña del EmpresaService se invoca exactamente una vez con el DTO proporcionado.
+     */
     @Test
     void testCambiarPassword() {
         CambioPasswordDTO dto = new CambioPasswordDTO();
@@ -73,6 +119,18 @@ class EmpresaControllerTest {
         verify(empresaService, times(1)).cambiarPassword(dto);
     }
 
+    /**
+     * Caso de prueba del método {@code actualizarEmpresa} de la clase EmpresaController.
+     * 
+     * Esta prueba verifica el comportamiento del método al actualizar una empresa existente.
+     * Asegura que la respuesta no es nula, el estado y el cuerpo de la respuesta son los esperados,
+     * y el método de servicio {@code actualizarEmpresa} es llamado exactamente una vez con los parámetros correctos.
+     * 
+     * Escenario de prueba:
+     * - Se proporciona un ID de empresa y un objeto EmpresaActualizarDTO válidos.
+     * - Se espera que el método del controlador devuelva una respuesta correcta con un mensaje de confirmación.
+     * - Se invoca a la capa de servicio para realizar la operación de actualización.
+     */
     @Test
     void testActualizarEmpresa() {
         Long id = 1L;

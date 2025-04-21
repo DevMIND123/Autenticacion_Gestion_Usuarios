@@ -25,6 +25,18 @@ class AuthControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Prueba unitaria para la funcionalidad de inicio de sesión en el AuthController.
+     * 
+     * Esta prueba verifica que el método de login:
+     * 1. Acepta un objeto LoginRequestDTO válido que contiene email y contraseña.
+     * 2. 2. Llama al método de inicio de sesión del authenticationService exactamente una vez con la solicitud proporcionada.
+     * 3. 3. Devuelve una ResponseEntity que contiene un JwtAuthenticationResponse con el token esperado.
+     * 4. Responde con un código de estado HTTP 200 (OK).
+     * 
+     * Mocking se utiliza para simular el comportamiento del authenticationService y asegurar que
+     * el controlador se comporta como se espera sin depender de dependencias externas.
+     */
     @Test
     void testLogin() {
         // Arrange
