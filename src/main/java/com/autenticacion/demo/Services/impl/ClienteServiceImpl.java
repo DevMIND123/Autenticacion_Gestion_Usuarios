@@ -56,6 +56,7 @@ public class ClienteServiceImpl implements ClienteService {
         // 🔁 ENVIAR EVENTO A KAFKA
         String mensaje = String.format("{\"id\": %d, \"nombre\": \"%s\", \"tipo\": \"%s\"}",
         guardado.getId(), guardado.getNombre(), guardado.getRol().name());
+	System.out.println("Se va a enviar mensaje a Kafka: " + mensaje);
         kafkaProducer.enviarMensaje(mensaje);
 
         return ClienteRespuestaDTO.builder()
