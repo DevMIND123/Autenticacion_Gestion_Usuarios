@@ -24,6 +24,11 @@ public class AdministradorController {
         return ResponseEntity.ok(administradorService.registrarAdministrador(dto));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<AdministradorRespuestaDTO> obtenerAdministradorPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(administradorService.obtenerAdministradorPorId(id));
+    }
+
     @GetMapping("/email/{email}")
     public Long obtenerIdAdministradorPorEmail(@PathVariable String email) {
         return administradorService.obtenerIdAdministradorPorEmail(email);

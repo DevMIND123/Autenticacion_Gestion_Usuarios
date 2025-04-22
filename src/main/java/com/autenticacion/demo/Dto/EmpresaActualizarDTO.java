@@ -23,13 +23,4 @@ public class EmpresaActualizarDTO {
     @NotBlank
     @Email
     private String email;
-
-    @NotBlank
-    private String direccion;
-
-    @NotBlank
-    private String telefono;
-
-    @NotNull 
-    private Rol rol;
 }
