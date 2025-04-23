@@ -7,7 +7,6 @@ import com.autenticacion.demo.Dto.ClienteRespuestaDTO;
 import com.autenticacion.demo.Services.ClienteService;
 
 import jakarta.validation.Valid;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +41,6 @@ public class ClienteController {
     public Long obtenerIdClientePorEmail(@PathVariable String email) {
         return clienteService.obtenerIdClientePorEmail(email);
     }
-
     
     @PatchMapping("/actualizar/{id}")
     public ResponseEntity<Map<String, String>> actualizarCliente(
@@ -61,7 +59,6 @@ public class ClienteController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
-
 
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminarCliente(@PathVariable Long id) {

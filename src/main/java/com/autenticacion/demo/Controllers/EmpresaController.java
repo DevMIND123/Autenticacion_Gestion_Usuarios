@@ -7,7 +7,6 @@ import com.autenticacion.demo.Dto.EmpresaRespuestaDTO;
 import com.autenticacion.demo.Services.EmpresaService;
 
 import jakarta.validation.Valid;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,5 +59,4 @@ public class EmpresaController {
         response.put("mensaje", "Empresa actualizada correctamente.");
         return ResponseEntity.ok(response);
     }
-
 }

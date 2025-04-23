@@ -39,7 +39,7 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .build();
 
         Empresa guardada = empresaRepository.save(empresa);
-
+      
         // ✅ Enviar evento a Kafka
         String mensaje = String.format("{\"id\": %d, \"nombre\": \"%s\", \"tipo\": \"%s\"}",
         guardada.getId(), guardada.getNombreEmpresa(), guardada.getRol().name());
@@ -57,7 +57,6 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .rol(dto.getRol())
                 .build();
     }
-
 
     @Override
     public Long obtenerIdEmpresaPorEmail(String email) {
@@ -88,8 +87,7 @@ public class EmpresaServiceImpl implements EmpresaService {
         empresa.setNit(dto.getNit());
         empresa.setNombreRepresentante(dto.getNombreRepresentante());
         empresa.setEmail(dto.getEmail());
-
-
+      
         empresaRepository.save(empresa);
     }
 
@@ -109,6 +107,4 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .rol(empresa.getRol())
                 .build();
     }
-
-
 }

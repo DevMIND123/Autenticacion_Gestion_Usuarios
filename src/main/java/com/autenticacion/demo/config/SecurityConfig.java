@@ -32,7 +32,6 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import org.springframework.beans.factory.annotation.Value;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
@@ -94,11 +93,10 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 String[] origins = corsAllowedOrigins.split(",");
-		registry.addMapping("/**")
-			.allowedOrigins(origins)
-			.allowedMethods("PUT", "DELETE", "GET", "POST", "PATCH");
+		            registry.addMapping("/**")
+			              .allowedOrigins(origins)
+			              .allowedMethods("PUT", "DELETE", "GET", "POST", "PATCH");
             }
         };
     }
-
 }
