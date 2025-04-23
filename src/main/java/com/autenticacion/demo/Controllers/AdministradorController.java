@@ -7,6 +7,10 @@ import com.autenticacion.demo.Dto.CambioPasswordDTO;
 import com.autenticacion.demo.Services.AdministradorService;
 
 import jakarta.validation.Valid;
+
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -29,18 +33,27 @@ public class AdministradorController {
         return ResponseEntity.ok(administradorService.obtenerAdministradorPorId(id));
     }
 
+    @GetMapping
+    public ResponseEntity<List<AdministradorRespuestaDTO>> getTodosLosAdmins() {
+        List<AdministradorRespuestaDTO> lista = administradorService.obtenerTodosLosAdministradores();
+        return ResponseEntity.ok(lista);
+    }
+
     @GetMapping("/email/{email}")
     public Long obtenerIdAdministradorPorEmail(@PathVariable String email) {
         return administradorService.obtenerIdAdministradorPorEmail(email);
     }
 
     @PatchMapping("/actualizar/{id}")
-    public ResponseEntity<String> actualizarAdministrador(@PathVariable Long id,
-            @RequestBody @Valid AdministradorActualizarDTO administrador) {
-        boolean actualizado = administradorService.actualizarAdministrador(id, administrador);
-        return actualizado ?
-                ResponseEntity.ok("Administrador actualizado correctamente.") :
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Administrador no encontrado.");
+    public ResponseEntity<Map<String, String>> actualizarAdministrador(
+            @PathVariable Long id,
+            @RequestBody @Valid AdministradorActualizarDTO dto) {
+        boolean actualizado = administradorService.actualizarAdministrador(id, dto);
+        if (!actualizado) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Administrador no encontrado."));
+        }
+        return ResponseEntity.ok(Map.of("message", "Administrador actualizado correctamente."));
     }
 
     @DeleteMapping("/eliminar/{id}")

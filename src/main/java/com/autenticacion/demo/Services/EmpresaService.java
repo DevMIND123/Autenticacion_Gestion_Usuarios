@@ -1,5 +1,7 @@
 package com.autenticacion.demo.Services;
 
+import java.util.List;
+
 import com.autenticacion.demo.Dto.CambioPasswordDTO;
 import com.autenticacion.demo.Dto.EmpresaActualizarDTO;
 import com.autenticacion.demo.Dto.EmpresaRegistroDTO;
@@ -18,4 +20,6 @@ public interface EmpresaService {
     void actualizarEmpresa(Long id, EmpresaActualizarDTO dto);
 
     EmpresaRespuestaDTO obtenerEmpresaPorId(Long id);
+
+    List<EmpresaRespuestaDTO> obtenerTodasLasEmpresas();
 }

@@ -9,6 +9,7 @@ import com.autenticacion.demo.Services.ClienteService;
 import jakarta.validation.Valid;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -36,6 +37,13 @@ public class ClienteController {
     public ResponseEntity<ClienteRespuestaDTO> obtenerClientePorId(@PathVariable Long id) {
         logger.info("Obteniendo cliente con ID: {}", id);
         return ResponseEntity.ok(clienteService.obtenerClientePorId(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ClienteRespuestaDTO>> getTodosLosClientes() {
+        logger.info("Obteniendo todos los clientes");
+        List<ClienteRespuestaDTO> lista = clienteService.obtenerTodosLosClientes();
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/email/{email}")

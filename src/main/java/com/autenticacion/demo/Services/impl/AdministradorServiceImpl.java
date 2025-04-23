@@ -6,7 +6,9 @@ import com.autenticacion.demo.Repositories.AdministradorRepository;
 import com.autenticacion.demo.Services.AdministradorService;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,17 +55,13 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Transactional
     public boolean actualizarAdministrador(Long id, AdministradorActualizarDTO dto) {
         Optional<Administrador> optionalAdministrador = administradorRepository.findById(id);
-
         if (optionalAdministrador.isEmpty()) {
             return false;
         }
-
         Administrador admin = optionalAdministrador.get();
         admin.setNombre(dto.getNombre());
         admin.setEmail(dto.getEmail());
-
         administradorRepository.save(admin); // Guarda los cambios
-
         return true;
     }
 
@@ -91,6 +89,21 @@ public class AdministradorServiceImpl implements AdministradorService {
                 .estadoCuenta(admin.getEstadoCuenta())
                 .rol(admin.getRol())
                 .build();
+    }
+
+       @Override
+    public List<AdministradorRespuestaDTO> obtenerTodosLosAdministradores() {
+        return administradorRepository.findAll()
+            .stream()
+            .map(admin -> AdministradorRespuestaDTO.builder()
+                .id(admin.getId())
+                .nombre(admin.getNombre())
+                .email(admin.getEmail())
+                .estadoCuenta(admin.getEstadoCuenta())
+                .rol(admin.getRol())
+                .build()
+            )
+            .collect(Collectors.toList());
     }
     
 }

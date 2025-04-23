@@ -3,6 +3,9 @@ package com.autenticacion.demo.Services;
 import com.autenticacion.demo.Dto.ClienteActualizarDTO;
 import com.autenticacion.demo.Dto.ClienteRegistroDTO;
 import com.autenticacion.demo.Dto.ClienteRespuestaDTO;
+
+import java.util.List;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.autenticacion.demo.Dto.CambioPasswordDTO;
@@ -22,4 +25,6 @@ public interface ClienteService {
     UserDetailsService userDetailsService();
 
     ClienteRespuestaDTO obtenerClientePorId(Long id);
+
+    List <ClienteRespuestaDTO> obtenerTodosLosClientes();
 }

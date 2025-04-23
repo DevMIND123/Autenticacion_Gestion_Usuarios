@@ -7,6 +7,8 @@ import com.autenticacion.demo.Repositories.EmpresaRepository;
 import com.autenticacion.demo.Services.EmpresaService;
 import com.autenticacion.demo.Services.KafkaProducerService;
 
+import java.util.List;
+
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -108,6 +110,25 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .estadoCuenta(empresa.getEstadoCuenta())
                 .rol(empresa.getRol())
                 .build();
+    }
+
+
+    @Override
+    public List<EmpresaRespuestaDTO> obtenerTodasLasEmpresas() {
+        List<Empresa> empresas = empresaRepository.findAll();
+        return empresas.stream()
+                .map(empresa -> EmpresaRespuestaDTO.builder()
+                        .id(empresa.getId())
+                        .nombreEmpresa(empresa.getNombreEmpresa())
+                        .nit(empresa.getNit())
+                        .nombreRepresentante(empresa.getNombreRepresentante())
+                        .email(empresa.getEmail())
+                        .direccion(empresa.getDireccion())
+                        .telefono(empresa.getTelefono())
+                        .estadoCuenta(empresa.getEstadoCuenta())
+                        .rol(empresa.getRol())
+                        .build())
+                .toList();
     }
 
 

@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -128,5 +129,19 @@ public class ClienteServiceImpl implements ClienteService {
                 .estadoCuenta(cliente.getEstadoCuenta())
                 .rol(cliente.getRol())
                 .build();
+    }
+
+    @Override
+    public List<ClienteRespuestaDTO> obtenerTodosLosClientes() {
+        List<Cliente> clientes = clienteRepository.findAll();
+        return clientes.stream()
+                .map(cliente -> ClienteRespuestaDTO.builder()
+                        .id(cliente.getId())
+                        .nombre(cliente.getNombre())
+                        .email(cliente.getEmail())
+                        .estadoCuenta(cliente.getEstadoCuenta())
+                        .rol(cliente.getRol())
+                        .build())
+                .toList();
     }
 }

@@ -1,5 +1,7 @@
 package com.autenticacion.demo.Services;
 
+import java.util.List;
+
 import com.autenticacion.demo.Dto.AdministradorActualizarDTO;
 import com.autenticacion.demo.Dto.AdministradorRegistroDTO;
 import com.autenticacion.demo.Dto.AdministradorRespuestaDTO;
@@ -18,4 +20,7 @@ public interface AdministradorService {
     void cambiarPassword(CambioPasswordDTO dto);
 
     AdministradorRespuestaDTO obtenerAdministradorPorId(Long id);
+
+    List<AdministradorRespuestaDTO> obtenerTodosLosAdministradores();
+
 }
