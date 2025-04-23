@@ -7,6 +7,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -116,10 +118,10 @@ class ClienteControllerTest {
 
         when(clienteService.actualizarCliente(id, dto)).thenReturn(true);
 
-        ResponseEntity<String> response = clienteController.actualizarCliente(id, dto);
+        ResponseEntity<Map<String, String>> response = clienteController.actualizarCliente(id, dto);
 
         assertNotNull(response);
-        assertEquals("Cliente actualizado correctamente.", response.getBody());
+        assertEquals("Cliente actualizado correctamente.", response.getBody().get("mensaje"));
         verify(clienteService, times(1)).actualizarCliente(id, dto);
     }
 
@@ -142,10 +144,10 @@ class ClienteControllerTest {
 
         when(clienteService.actualizarCliente(id, dto)).thenReturn(false);
 
-        ResponseEntity<String> response = clienteController.actualizarCliente(id, dto);
+        ResponseEntity<Map<String, String>> response = clienteController.actualizarCliente(id, dto);
 
         assertNotNull(response);
-        assertEquals("Cliente no encontrado.", response.getBody());
+        assertEquals("Cliente no encontrado.", response.getBody().get("error"));
         verify(clienteService, times(1)).actualizarCliente(id, dto);
     }
 

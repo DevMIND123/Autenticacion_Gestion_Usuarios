@@ -4,6 +4,7 @@ import com.autenticacion.demo.Dto.*;
 import com.autenticacion.demo.Entities.Empresa;
 import com.autenticacion.demo.Entities.Rol;
 import com.autenticacion.demo.Repositories.EmpresaRepository;
+import com.autenticacion.demo.Services.KafkaProducerService;
 import com.autenticacion.demo.Services.impl.EmpresaServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,9 +15,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.*;
 
 class EmpresaServiceTest {
+
+    @Mock
+    private KafkaProducerService kafkaProducer; // Mock del KafkaProducer
 
     @Mock
     private EmpresaRepository empresaRepository;
@@ -55,10 +60,22 @@ class EmpresaServiceTest {
      */
     @Test
     void testRegistrarEmpresa() {
-        EmpresaRegistroDTO dto = new EmpresaRegistroDTO("test@example.com", "password", "Empresa Test", "123456789", "Representante Test", "Direccion Test", "123456789", Rol.EMPRESA);
-        Empresa empresa = Empresa.builder()
+        // Arrange
+        EmpresaRegistroDTO dto = EmpresaRegistroDTO.builder()
+                .email("empresa@test.com")
+                .password("password123")
+                .nombreEmpresa("Mi Empresa")
+                .nit("123456789")
+                .nombreRepresentante("Juan Perez")
+                .direccion("Calle 123")
+                .telefono("3001234567")
+                .rol(Rol.EMPRESA)
+                .build();
+
+        String passwordEncoded = "encodedPassword123";
+        Empresa empresaEsperada = Empresa.builder()
                 .email(dto.getEmail())
-                .password("encodedPassword")
+                .password(passwordEncoded)
                 .nombreEmpresa(dto.getNombreEmpresa())
                 .nit(dto.getNit())
                 .nombreRepresentante(dto.getNombreRepresentante())
@@ -68,14 +85,42 @@ class EmpresaServiceTest {
                 .rol(Rol.EMPRESA)
                 .build();
 
-        when(passwordEncoder.encode(dto.getPassword())).thenReturn("encodedPassword");
-        when(empresaRepository.save(any(Empresa.class))).thenReturn(empresa);
+        Empresa empresaGuardada = Empresa.builder()
+                .id(1L)
+                .email(dto.getEmail())
+                .password(passwordEncoded)
+                .nombreEmpresa(dto.getNombreEmpresa())
+                .nit(dto.getNit())
+                .nombreRepresentante(dto.getNombreRepresentante())
+                .direccion(dto.getDireccion())
+                .telefono(dto.getTelefono())
+                .estadoCuenta("Activo")
+                .rol(Rol.EMPRESA)
+                .build();
 
-        EmpresaRespuestaDTO respuesta = empresaService.registrarEmpresa(dto);
+        when(passwordEncoder.encode(dto.getPassword())).thenReturn(passwordEncoded);
+        when(empresaRepository.save(any(Empresa.class))).thenReturn(empresaGuardada);
 
-        assertNotNull(respuesta);
-        assertEquals(dto.getEmail(), respuesta.getEmail());
-        verify(empresaRepository, times(1)).save(any(Empresa.class));
+        // Act
+        EmpresaRespuestaDTO resultado = empresaService.registrarEmpresa(dto);
+
+        // Assert
+        assertNotNull(resultado);
+        assertEquals(empresaGuardada.getId(), resultado.getId());
+        assertEquals(dto.getNombreEmpresa(), resultado.getNombreEmpresa());
+        assertEquals(dto.getNit(), resultado.getNit());
+        assertEquals(dto.getNombreRepresentante(), resultado.getNombreRepresentante());
+        assertEquals(dto.getEmail(), resultado.getEmail());
+        assertEquals(dto.getDireccion(), resultado.getDireccion());
+        assertEquals(dto.getTelefono(), resultado.getTelefono());
+        assertEquals("Activo", resultado.getEstadoCuenta());
+        assertEquals(Rol.EMPRESA, resultado.getRol());
+
+        verify(passwordEncoder).encode(dto.getPassword());
+        verify(empresaRepository).save(empresaEsperada);
+        verify(kafkaProducer).enviarMensaje(contains("\"id\": 1"));
+        verify(kafkaProducer).enviarMensaje(contains("\"nombre\": \"Mi Empresa\""));
+        verify(kafkaProducer).enviarMensaje(contains("\"tipo\": \"EMPRESA\""));
     }
 
     /**
@@ -181,13 +226,13 @@ class EmpresaServiceTest {
      * 
      * Afirmaciones:
      * - Los atributos de la entidad Empresa (nombreEmpresa, nit, nombreRepresentante, 
-     * email, direccion, telefono, y rol) deben coincidir con los valores del DTO.
+     * email) deben coincidir con los valores del DTO.
      * - El método save de empresaRepository debe invocarse una vez.
      */
     @Test
     void testActualizarEmpresa() {
         Long id = 1L;
-        EmpresaActualizarDTO dto = new EmpresaActualizarDTO("Empresa Actualizada", "987654321", "Representante Actualizado", "actualizado@example.com", "Direccion Actualizada", "987654321", Rol.EMPRESA);
+        EmpresaActualizarDTO dto = new EmpresaActualizarDTO("Empresa Actualizada", "987654321", "Representante Actualizado", "actualizado@example.com");
         Empresa empresa = Empresa.builder().id(id).build();
 
         when(empresaRepository.findById(id)).thenReturn(Optional.of(empresa));
@@ -198,9 +243,9 @@ class EmpresaServiceTest {
         assertEquals(dto.getNit(), empresa.getNit());
         assertEquals(dto.getNombreRepresentante(), empresa.getNombreRepresentante());
         assertEquals(dto.getEmail(), empresa.getEmail());
-        assertEquals(dto.getDireccion(), empresa.getDireccion());
-        assertEquals(dto.getTelefono(), empresa.getTelefono());
-        assertEquals(dto.getRol(), empresa.getRol());
+        // assertEquals(dto.getDireccion(), empresa.getDireccion());
+        // assertEquals(dto.getTelefono(), empresa.getTelefono());
+        // assertEquals(dto.getRol(), empresa.getRol());
         verify(empresaRepository, times(1)).save(empresa);
     }
 }

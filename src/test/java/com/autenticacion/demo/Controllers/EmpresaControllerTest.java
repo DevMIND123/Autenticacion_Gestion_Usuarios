@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Map;
+
 class EmpresaControllerTest {
 
     @Mock
@@ -136,10 +138,10 @@ class EmpresaControllerTest {
         Long id = 1L;
         EmpresaActualizarDTO dto = new EmpresaActualizarDTO();
 
-        ResponseEntity<String> response = empresaController.actualizarEmpresa(id, dto);
+        ResponseEntity<Map<String, String>> response = empresaController.actualizarEmpresa(id, dto);
 
         assertNotNull(response);
-        assertEquals(ResponseEntity.ok("Empresa actualizada correctamente."), response);
+        assertEquals("Empresa actualizada correctamente.", response.getBody().get("mensaje"));
         verify(empresaService, times(1)).actualizarEmpresa(id, dto);
     }
 }
