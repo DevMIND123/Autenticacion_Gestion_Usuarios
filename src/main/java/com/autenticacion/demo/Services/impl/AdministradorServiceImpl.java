@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         admin.setNombre(dto.getNombre());
         admin.setEmail(dto.getEmail());
         administradorRepository.save(admin); // Guarda los cambios
+
         return true;
     }
 
@@ -90,7 +92,7 @@ public class AdministradorServiceImpl implements AdministradorService {
                 .rol(admin.getRol())
                 .build();
     }
-
+  
        @Override
     public List<AdministradorRespuestaDTO> obtenerTodosLosAdministradores() {
         return administradorRepository.findAll()
@@ -105,5 +107,4 @@ public class AdministradorServiceImpl implements AdministradorService {
             )
             .collect(Collectors.toList());
     }
-    
 }

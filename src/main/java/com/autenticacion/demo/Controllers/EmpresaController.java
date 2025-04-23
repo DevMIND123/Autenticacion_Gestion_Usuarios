@@ -38,7 +38,7 @@ public class EmpresaController {
         List<EmpresaRespuestaDTO> lista = empresaService.obtenerTodasLasEmpresas();
         return ResponseEntity.ok(lista);
     }
-
+  
     @GetMapping("/email/{email}")
     public Long obtenerIdEmpresaPorEmail(@PathVariable String email) {
         return empresaService.obtenerIdEmpresaPorEmail(email);

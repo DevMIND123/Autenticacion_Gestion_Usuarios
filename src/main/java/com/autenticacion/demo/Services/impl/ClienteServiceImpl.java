@@ -130,7 +130,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .rol(cliente.getRol())
                 .build();
     }
-
+  
     @Override
     public List<ClienteRespuestaDTO> obtenerTodosLosClientes() {
         List<Cliente> clientes = clienteRepository.findAll();

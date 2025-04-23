@@ -22,5 +22,4 @@ public interface AdministradorService {
     AdministradorRespuestaDTO obtenerAdministradorPorId(Long id);
 
     List<AdministradorRespuestaDTO> obtenerTodosLosAdministradores();
-
 }

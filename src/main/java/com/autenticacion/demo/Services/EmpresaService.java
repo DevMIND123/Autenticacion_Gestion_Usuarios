@@ -20,6 +20,6 @@ public interface EmpresaService {
     void actualizarEmpresa(Long id, EmpresaActualizarDTO dto);
 
     EmpresaRespuestaDTO obtenerEmpresaPorId(Long id);
-
+  
     List<EmpresaRespuestaDTO> obtenerTodasLasEmpresas();
 }

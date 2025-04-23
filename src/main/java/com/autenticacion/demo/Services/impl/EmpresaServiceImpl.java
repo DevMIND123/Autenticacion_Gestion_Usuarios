@@ -112,7 +112,6 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .build();
     }
 
-
     @Override
     public List<EmpresaRespuestaDTO> obtenerTodasLasEmpresas() {
         List<Empresa> empresas = empresaRepository.findAll();
@@ -130,6 +129,4 @@ public class EmpresaServiceImpl implements EmpresaService {
                         .build())
                 .toList();
     }
-
-
 }
