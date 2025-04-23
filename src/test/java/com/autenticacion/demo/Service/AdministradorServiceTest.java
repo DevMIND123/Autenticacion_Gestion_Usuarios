@@ -120,16 +120,28 @@ class AdministradorServiceTest {
      * exactamente una vez con los parámetros correctos.
      */
     @Test
-    void actualizarAdministrador() {
+    void actualizarAdministrador_Success() {
         Long id = 1L;
-        AdministradorActualizarDTO dto = new AdministradorActualizarDTO("Updated Name", "updated@example.com");
+        AdministradorActualizarDTO dto = new AdministradorActualizarDTO();
+        dto.setNombre("Nuevo Nombre");
+        dto.setEmail("nuevoemail@example.com");
 
-        when(administradorRepository.actualizarAdministrador(id, dto.getNombre(), dto.getEmail())).thenReturn(1);
+        Administrador administradorExistente = Administrador.builder()
+                .id(id)
+                .nombre("Nombre Antiguo")
+                .email("antiguoemail@example.com")
+                .build();
 
-        boolean actualizado = administradorService.actualizarAdministrador(id, dto);
+        when(administradorRepository.findById(id)).thenReturn(Optional.of(administradorExistente));
+        when(administradorRepository.save(any(Administrador.class))).thenReturn(administradorExistente);
 
-        assertTrue(actualizado);
-        verify(administradorRepository, times(1)).actualizarAdministrador(id, dto.getNombre(), dto.getEmail());
+        boolean result = administradorService.actualizarAdministrador(id, dto);
+
+        assertTrue(result);
+        assertEquals(dto.getNombre(), administradorExistente.getNombre());
+        assertEquals(dto.getEmail(), administradorExistente.getEmail());
+        verify(administradorRepository, times(1)).save(administradorExistente);
+        verify(administradorRepository, times(1)).findById(id);
     }
 
     /*
