@@ -40,9 +40,9 @@ public class EmpresaServiceImpl implements EmpresaService {
 
         Empresa guardada = empresaRepository.save(empresa);
 
-        // ✅ Enviar evento a Kafka
-        String mensaje = String.format("{\"id\": %d, \"nombre\": \"%s\", \"tipo\": \"%s\"}",
-        guardada.getId(), guardada.getNombreEmpresa(), guardada.getRol().name());
+        // ✅ Enviar evento a Kafka con email
+        String mensaje = String.format("{\"email\": \"%s\", \"nombre\": \"%s\", \"tipo\": \"%s\"}",
+                guardada.getEmail(), guardada.getNombreEmpresa(), guardada.getRol().name());
         kafkaProducer.enviarMensaje(mensaje);
 
         return EmpresaRespuestaDTO.builder()

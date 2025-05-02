@@ -53,9 +53,9 @@ public class ClienteServiceImpl implements ClienteService {
 
         Cliente guardado = clienteRepository.save(cliente);
 
-        // 🔁 ENVIAR EVENTO A KAFKA
-        String mensaje = String.format("{\"id\": %d, \"nombre\": \"%s\", \"tipo\": \"%s\"}",
-        guardado.getId(), guardado.getNombre(), guardado.getRol().name());
+        // ✅ Enviar evento a Kafka con email
+        String mensaje = String.format("{\"email\": \"%s\", \"nombre\": \"%s\", \"tipo\": \"%s\"}",
+                guardado.getEmail(), guardado.getNombre(), guardado.getRol().name());
         kafkaProducer.enviarMensaje(mensaje);
 
         return ClienteRespuestaDTO.builder()
@@ -66,7 +66,6 @@ public class ClienteServiceImpl implements ClienteService {
                 .rol(dto.getRol())
                 .build();
     }
-
     @Override
     public Long obtenerIdClientePorEmail(String email) {
         return clienteRepository.findByEmail(email)
