@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api.retochimba.com/administradores")
 public class AdministradorController {
@@ -24,6 +26,12 @@ public class AdministradorController {
         return ResponseEntity.ok(administradorService.registrarAdministrador(dto));
     }
 
+    @GetMapping
+    public ResponseEntity<List<AdministradorRespuestaDTO>> listarAdministradores() {
+        return ResponseEntity.ok(administradorService.listarAdministradores());
+    }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<AdministradorRespuestaDTO> obtenerAdministradorPorId(@PathVariable Long id) {
         return ResponseEntity.ok(administradorService.obtenerAdministradorPorId(id));
@@ -36,7 +44,7 @@ public class AdministradorController {
 
     @PatchMapping("/actualizar/{id}")
     public ResponseEntity<String> actualizarAdministrador(@PathVariable Long id,
-            @RequestBody @Valid AdministradorActualizarDTO administrador) {
+                                                          @RequestBody @Valid AdministradorActualizarDTO administrador) {
         boolean actualizado = administradorService.actualizarAdministrador(id, administrador);
         return actualizado ?
                 ResponseEntity.ok("Administrador actualizado correctamente.") :

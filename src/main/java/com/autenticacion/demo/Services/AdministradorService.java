@@ -5,6 +5,8 @@ import com.autenticacion.demo.Dto.AdministradorRegistroDTO;
 import com.autenticacion.demo.Dto.AdministradorRespuestaDTO;
 import com.autenticacion.demo.Dto.CambioPasswordDTO;
 
+import java.util.List;
+
 public interface AdministradorService {
 
     AdministradorRespuestaDTO registrarAdministrador(AdministradorRegistroDTO dto);
@@ -18,4 +20,7 @@ public interface AdministradorService {
     void cambiarPassword(CambioPasswordDTO dto);
 
     AdministradorRespuestaDTO obtenerAdministradorPorId(Long id);
+
+    List<AdministradorRespuestaDTO> listarAdministradores();
+
 }

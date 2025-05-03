@@ -9,6 +9,7 @@ import com.autenticacion.demo.Services.EmpresaService;
 import jakarta.validation.Valid;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,11 @@ public class EmpresaController {
     @PostMapping
     public ResponseEntity<EmpresaRespuestaDTO> registrarEmpresa(@RequestBody @Valid EmpresaRegistroDTO dto) {
         return ResponseEntity.ok(empresaService.registrarEmpresa(dto));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EmpresaRespuestaDTO>> listarEmpresas() {
+        return ResponseEntity.ok(empresaService.obtenerEmpresas());
     }
 
     @GetMapping("/{id}")

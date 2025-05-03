@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmpresaServiceImpl implements EmpresaService {
 
@@ -110,5 +112,22 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .build();
     }
 
+    @Override
+    public List<EmpresaRespuestaDTO> obtenerEmpresas() {
+        List<Empresa> empresas = empresaRepository.findAll();
+        return empresas.stream()
+                .map(empresa -> EmpresaRespuestaDTO.builder()
+                        .id(empresa.getId())
+                        .nombreEmpresa(empresa.getNombreEmpresa())
+                        .nit(empresa.getNit())
+                        .nombreRepresentante(empresa.getNombreRepresentante())
+                        .email(empresa.getEmail())
+                        .direccion(empresa.getDireccion())
+                        .telefono(empresa.getTelefono())
+                        .estadoCuenta(empresa.getEstadoCuenta())
+                        .rol(empresa.getRol())
+                        .build())
+                .toList();
+    }
 
 }

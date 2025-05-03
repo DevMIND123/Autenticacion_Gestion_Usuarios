@@ -9,6 +9,7 @@ import com.autenticacion.demo.Services.ClienteService;
 import jakarta.validation.Valid;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -30,6 +31,12 @@ public class ClienteController {
     public ResponseEntity<ClienteRespuestaDTO> registrarCliente(@RequestBody @Valid ClienteRegistroDTO dto) {
         logger.info("Registrando cliente con datos: {}", dto);
         return ResponseEntity.ok(clienteService.registrarCliente(dto));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ClienteRespuestaDTO>> listarClientes() {
+        logger.info("Listando todos los clientes");
+        return ResponseEntity.ok(clienteService.listarClientes());
     }
 
     @GetMapping("/{id}")

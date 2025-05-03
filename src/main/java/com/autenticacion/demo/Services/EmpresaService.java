@@ -5,6 +5,8 @@ import com.autenticacion.demo.Dto.EmpresaActualizarDTO;
 import com.autenticacion.demo.Dto.EmpresaRegistroDTO;
 import com.autenticacion.demo.Dto.EmpresaRespuestaDTO;
 
+import java.util.List;
+
 public interface EmpresaService {
 
     EmpresaRespuestaDTO registrarEmpresa(EmpresaRegistroDTO dto);
@@ -18,4 +20,6 @@ public interface EmpresaService {
     void actualizarEmpresa(Long id, EmpresaActualizarDTO dto);
 
     EmpresaRespuestaDTO obtenerEmpresaPorId(Long id);
+
+    List<EmpresaRespuestaDTO> obtenerEmpresas();
 }
