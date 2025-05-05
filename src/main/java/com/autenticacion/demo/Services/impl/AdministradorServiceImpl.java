@@ -6,7 +6,9 @@ import com.autenticacion.demo.Repositories.AdministradorRepository;
 import com.autenticacion.demo.Services.AdministradorService;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -90,5 +92,18 @@ public class AdministradorServiceImpl implements AdministradorService {
                 .estadoCuenta(admin.getEstadoCuenta())
                 .rol(admin.getRol())
                 .build();
+    }
+
+    @Override
+    public List<AdministradorRespuestaDTO> listarAdministradores() {
+        return administradorRepository.findAll().stream().map(admin ->
+                AdministradorRespuestaDTO.builder()
+                        .id(admin.getId())
+                        .nombre(admin.getNombre())
+                        .email(admin.getEmail())
+                        .estadoCuenta(admin.getEstadoCuenta())
+                        .rol(admin.getRol())
+                        .build()
+        ).toList();
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmpresaServiceImpl implements EmpresaService {
 
@@ -39,10 +41,11 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .build();
 
         Empresa guardada = empresaRepository.save(empresa);
-      
-        // ✅ Enviar evento a Kafka
-        String mensaje = String.format("{\"id\": %d, \"nombre\": \"%s\", \"tipo\": \"%s\"}",
-        guardada.getId(), guardada.getNombreEmpresa(), guardada.getRol().name());
+
+        // ✅ Enviar evento a Kafka con email
+        String mensaje = String.format("{\"email\": \"%s\", \"nombre\": \"%s\", \"tipo\": \"%s\"}",
+                guardada.getEmail(), guardada.getNombreEmpresa(), guardada.getRol().name());
+
         kafkaProducer.enviarMensaje(mensaje);
 
         return EmpresaRespuestaDTO.builder()
@@ -87,7 +90,7 @@ public class EmpresaServiceImpl implements EmpresaService {
         empresa.setNit(dto.getNit());
         empresa.setNombreRepresentante(dto.getNombreRepresentante());
         empresa.setEmail(dto.getEmail());
-      
+
         empresaRepository.save(empresa);
     }
 
@@ -106,5 +109,23 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .estadoCuenta(empresa.getEstadoCuenta())
                 .rol(empresa.getRol())
                 .build();
+    }
+
+    @Override
+    public List<EmpresaRespuestaDTO> obtenerEmpresas() {
+        List<Empresa> empresas = empresaRepository.findAll();
+        return empresas.stream()
+                .map(empresa -> EmpresaRespuestaDTO.builder()
+                        .id(empresa.getId())
+                        .nombreEmpresa(empresa.getNombreEmpresa())
+                        .nit(empresa.getNit())
+                        .nombreRepresentante(empresa.getNombreRepresentante())
+                        .email(empresa.getEmail())
+                        .direccion(empresa.getDireccion())
+                        .telefono(empresa.getTelefono())
+                        .estadoCuenta(empresa.getEstadoCuenta())
+                        .rol(empresa.getRol())
+                        .build())
+                .toList();
     }
 }

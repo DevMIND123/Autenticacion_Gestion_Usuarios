@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.autenticacion.demo.Dto.CambioPasswordDTO;
 
+import java.util.List;
+
 public interface ClienteService {
 
     ClienteRespuestaDTO registrarCliente(ClienteRegistroDTO dto);
@@ -18,8 +20,10 @@ public interface ClienteService {
     void eliminarCliente(Long id);
 
     void cambiarPassword(CambioPasswordDTO dto);
-  
+
     UserDetailsService userDetailsService();
 
     ClienteRespuestaDTO obtenerClientePorId(Long id);
+
+    List<ClienteRespuestaDTO> listarClientes();
 }

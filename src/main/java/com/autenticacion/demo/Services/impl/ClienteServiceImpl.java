@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -53,10 +54,9 @@ public class ClienteServiceImpl implements ClienteService {
 
         Cliente guardado = clienteRepository.save(cliente);
 
-        // 🔁 ENVIAR EVENTO A KAFKA
-        String mensaje = String.format("{\"id\": %d, \"nombre\": \"%s\", \"tipo\": \"%s\"}",
-        guardado.getId(), guardado.getNombre(), guardado.getRol().name());
-	      System.out.println("Se va a enviar mensaje a Kafka: " + mensaje);
+        // ✅ Enviar evento a Kafka con email
+        String mensaje = String.format("{\"email\": \"%s\", \"nombre\": \"%s\", \"tipo\": \"%s\"}",
+                guardado.getEmail(), guardado.getNombre(), guardado.getRol().name());
         kafkaProducer.enviarMensaje(mensaje);
 
         return ClienteRespuestaDTO.builder()
@@ -129,5 +129,19 @@ public class ClienteServiceImpl implements ClienteService {
                 .estadoCuenta(cliente.getEstadoCuenta())
                 .rol(cliente.getRol())
                 .build();
+    }
+  
+    @Override
+    public List<ClienteRespuestaDTO> listarClientes() {
+        List<Cliente> clientes = clienteRepository.findAll();
+        return clientes.stream()
+                .map(cliente -> ClienteRespuestaDTO.builder()
+                        .id(cliente.getId())
+                        .nombre(cliente.getNombre())
+                        .email(cliente.getEmail())
+                        .estadoCuenta(cliente.getEstadoCuenta())
+                        .rol(cliente.getRol())
+                        .build())
+                .toList();
     }
 }
