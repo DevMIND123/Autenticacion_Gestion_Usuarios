@@ -45,6 +45,7 @@ public class EmpresaServiceImpl implements EmpresaService {
         // ✅ Enviar evento a Kafka con email
         String mensaje = String.format("{\"email\": \"%s\", \"nombre\": \"%s\", \"tipo\": \"%s\"}",
                 guardada.getEmail(), guardada.getNombreEmpresa(), guardada.getRol().name());
+
         kafkaProducer.enviarMensaje(mensaje);
 
         return EmpresaRespuestaDTO.builder()
@@ -59,7 +60,6 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .rol(dto.getRol())
                 .build();
     }
-
 
     @Override
     public Long obtenerIdEmpresaPorEmail(String email) {
@@ -90,7 +90,6 @@ public class EmpresaServiceImpl implements EmpresaService {
         empresa.setNit(dto.getNit());
         empresa.setNombreRepresentante(dto.getNombreRepresentante());
         empresa.setEmail(dto.getEmail());
-
 
         empresaRepository.save(empresa);
     }
@@ -129,5 +128,4 @@ public class EmpresaServiceImpl implements EmpresaService {
                         .build())
                 .toList();
     }
-
 }

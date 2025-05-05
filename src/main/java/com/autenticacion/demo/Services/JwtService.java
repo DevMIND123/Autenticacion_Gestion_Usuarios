@@ -18,7 +18,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 
-
 @Service
 public class JwtService {
 

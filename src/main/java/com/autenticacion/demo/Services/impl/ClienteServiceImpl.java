@@ -67,6 +67,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .rol(dto.getRol())
                 .build();
     }
+
     @Override
     public Long obtenerIdClientePorEmail(String email) {
         return clienteRepository.findByEmail(email)
@@ -129,7 +130,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .rol(cliente.getRol())
                 .build();
     }
-
+  
     @Override
     public List<ClienteRespuestaDTO> listarClientes() {
         List<Cliente> clientes = clienteRepository.findAll();

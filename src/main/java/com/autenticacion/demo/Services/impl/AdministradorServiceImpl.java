@@ -106,6 +106,4 @@ public class AdministradorServiceImpl implements AdministradorService {
                         .build()
         ).toList();
     }
-
-
 }

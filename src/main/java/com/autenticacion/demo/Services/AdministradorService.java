@@ -20,7 +20,6 @@ public interface AdministradorService {
     void cambiarPassword(CambioPasswordDTO dto);
 
     AdministradorRespuestaDTO obtenerAdministradorPorId(Long id);
-
+  
     List<AdministradorRespuestaDTO> listarAdministradores();
-
 }

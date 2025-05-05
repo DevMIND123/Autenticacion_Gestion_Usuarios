@@ -1,42 +1,31 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  postgres:
-    image: postgres:13
-    container_name: retochimba-postgres
-    restart: always
+  auth-backend:
+    build:
+      context: .
+    container_name: auth_backend
     ports:
-      - "5432:5432"
+      - "8080:8080"
     environment:
-      POSTGRES_DB: authdb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME}
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - SPRING_JPA_DDL_AUTO=${SPRING_JPA_DDL_AUTO}
+      - SPRING_JPA_SHOW_SQL=${SPRING_JPA_SHOW_SQL}
+      - SPRING_JPA_DIALECT=${SPRING_JPA_DIALECT}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_KEY_TIME_EXP=${JWT_KEY_TIME_EXP}
+      - KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./firebase.env:/app/firebase.env
+      - ./.env:/app/.env
+    networks:
+      - devNetworkArq
+    restart: unless-stopped
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.2.1
-    container_name: retochimba-zookeeper
-    restart: always
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-
-  kafka:
-    image: confluentinc/cp-kafka:7.2.1
-    container_name: retochimba-kafka
-    restart: always
-    ports:
-      - "9092:9092"
-    depends_on:
-      - zookeeper
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: retochimba-zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true" 
-
-volumes:
-  postgres_data:
-  pgadmin_data:
+networks:
+  devNetworkArq:
+    external: true

@@ -30,6 +30,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+import org.springframework.beans.factory.annotation.Value;
+
 
 @Configuration
 @EnableWebSecurity
@@ -83,16 +85,19 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    @Value("${cors.allowed-origins}")
+    private String corsAllowedOrigins;
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:4200").allowedMethods("PUT", "DELETE",
-                        "GET", "POST", "PATCH");
-
+                String[] origins = corsAllowedOrigins.split(",");
+		            registry.addMapping("/**")
+			              .allowedOrigins(origins)
+			              .allowedMethods("PUT", "DELETE", "GET", "POST", "PATCH");
             }
         };
     }
-
 }
