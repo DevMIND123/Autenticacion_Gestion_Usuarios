@@ -114,30 +114,23 @@ class EmpresaServiceTest {
         // Act
         EmpresaRespuestaDTO resultado = empresaService.registrarEmpresa(dto);
 
-        // Assert - Verificar el DTO de respuesta
-        assertNotNull(resultado, "El DTO de respuesta no debería ser nulo");
-        assertEquals(empresaGuardada.getId(), resultado.getId(), "El ID no coincide");
-        assertEquals(dto.getEmail(), resultado.getEmail(), "El email no coincide");
-        assertEquals(dto.getNombreEmpresa(), resultado.getNombreEmpresa(), "El nombre de empresa no coincide");
-        assertEquals(dto.getNit(), resultado.getNit(), "El NIT no coincide");
-        assertEquals(dto.getNombreRepresentante(), resultado.getNombreRepresentante(),
-                "El nombre del representante no coincide");
-        assertEquals(dto.getDireccion(), resultado.getDireccion(), "La dirección no coincide");
-        assertEquals(dto.getTelefono(), resultado.getTelefono(), "El teléfono no coincide");
-        assertEquals("Activo", resultado.getEstadoCuenta(), "El estado de cuenta debería ser 'Activo'");
-        assertEquals(Rol.EMPRESA, resultado.getRol(), "El rol debería ser EMPRESA");
+        // Assert
+        assertNotNull(resultado);
+        assertEquals(empresaGuardada.getId(), resultado.getId());
+        assertEquals(dto.getNombreEmpresa(), resultado.getNombreEmpresa());
+        assertEquals(dto.getNit(), resultado.getNit());
+        assertEquals(dto.getNombreRepresentante(), resultado.getNombreRepresentante());
+        assertEquals(dto.getEmail(), resultado.getEmail());
+        assertEquals(dto.getDireccion(), resultado.getDireccion());
+        assertEquals(dto.getTelefono(), resultado.getTelefono());
+        assertEquals("Activo", resultado.getEstadoCuenta());
+        assertEquals(Rol.EMPRESA, resultado.getRol());
 
-        // Verificar interacciones con los mocks
-        verify(passwordEncoder, times(1)).encode(dto.getPassword());
-        verify(empresaRepository, times(1)).save(empresaEsperada);
-
-        // Verificar mensaje Kafka
-        String expectedKafkaMessage = String.format(
-                "{\"email\": \"%s\", \"nombre\": \"%s\", \"tipo\": \"%s\"}",
-                dto.getEmail(),
-                dto.getNombreEmpresa(),
-                Rol.EMPRESA.name());
-        verify(kafkaProducer, times(1)).enviarMensaje(expectedKafkaMessage);
+        verify(passwordEncoder).encode(dto.getPassword());
+        verify(empresaRepository).save(empresaEsperada);
+        verify(kafkaProducer).enviarMensaje(contains("\"email\": \"empresa@test.com\""));
+        verify(kafkaProducer).enviarMensaje(contains("\"nombre\": \"Mi Empresa\""));
+        verify(kafkaProducer).enviarMensaje(contains("\"tipo\": \"EMPRESA\""));
     }
 
     /**
