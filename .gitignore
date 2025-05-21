@@ -34,3 +34,7 @@ build/
 
 .env
 firebase.env
+docker-compose.yml
+Dockerfile
+kafka.sh
+src/main/resources/application.properties
