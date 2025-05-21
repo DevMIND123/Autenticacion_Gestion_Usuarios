@@ -128,8 +128,8 @@ class EmpresaServiceTest {
 
         verify(passwordEncoder).encode(dto.getPassword());
         verify(empresaRepository).save(empresaEsperada);
-        verify(kafkaProducer).enviarMensaje(contains("\"email\": \"empresa@test.com\""));
-        verify(kafkaProducer).enviarMensaje(contains("\"nombre\": \"Mi Empresa\""));
+        verify(kafkaProducer).enviarMensaje(contains("\"email\": \"nueva@empresa.com\""));
+        verify(kafkaProducer).enviarMensaje(contains("\"nombre\": \"Nueva Empresa S.A.\""));
         verify(kafkaProducer).enviarMensaje(contains("\"tipo\": \"EMPRESA\""));
     }
 
