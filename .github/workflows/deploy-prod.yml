@@ -7,21 +7,35 @@ on:
     branches: [main]
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
   deploy:
     runs-on: self-hosted
-
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      
-    - name: Copy .env to runner workspace
-      run: cp /home/arquitectura/Autenticacion_Gestion_Usuarios/.env $GITHUB_WORKSPACE/
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Build and deploy microservice
-      working-directory: ${{ github.workspace }}
-      run: |
-        cd $GITHUB_WORKSPACE
-        mvn clean package -DskipTests
-        docker-compose down
-        docker-compose build --no-cache
-        docker-compose up -d
+      - name: Copy .env to runner workspace
+        run: cp /home/arquitectura/Autenticacion_Gestion_Usuarios/.env $GITHUB_WORKSPACE/
+
+      - name: Build and deploy microservice
+        working-directory: ${{ github.workspace }}
+        run: |
+          mvn clean package -DskipTests
+          docker-compose down
+          docker-compose build --no-cache
+          docker-compose up -d
+
