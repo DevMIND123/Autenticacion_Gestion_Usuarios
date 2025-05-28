@@ -23,9 +23,9 @@ services:
       - ./firebase.env:/app/firebase.env
       - ./.env:/app/.env
     networks:
-      - devNetworkArq
+      - prodNetworkArq
     restart: unless-stopped
 
 networks:
-  devNetworkArq:
+  prodNetworkArq:
     external: true
