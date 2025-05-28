@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  auth-backend:
+    build:
+      context: .
+    container_name: auth_backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME}
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - SPRING_JPA_DDL_AUTO=${SPRING_JPA_DDL_AUTO}
+      - SPRING_JPA_SHOW_SQL=${SPRING_JPA_SHOW_SQL}
+      - SPRING_JPA_DIALECT=${SPRING_JPA_DIALECT}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_KEY_TIME_EXP=${JWT_KEY_TIME_EXP}
+      - KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS}
+    volumes:
+      - ./firebase.env:/app/firebase.env
+      - ./.env:/app/.env
+    networks:
+      - prodNetworkArq
+    restart: unless-stopped
+
+networks:
+  prodNetworkArq:
+    external: true
