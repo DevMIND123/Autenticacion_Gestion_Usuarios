@@ -8,23 +8,15 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up SSH agent
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_VM2 }}
-
-    - name: Deploy Spring Boot Auth microservice to VM
+    - name: Build and deploy microservice
       run: |
-        ssh -o StrictHostKeyChecking=no arquitectura@200.3.152.101 << 'EOF'
-          cd /path/to/your/springboot-service
-          git pull origin $(git rev-parse --abbrev-ref HEAD)
-          mvn clean package -DskipTests
-          docker-compose build --no-cache
-          docker-compose up -d
-        EOF
+        cd $GITHUB_WORKSPACE
+        mvn clean package -DskipTests
+        docker-compose build --no-cache
+        docker-compose up -d
